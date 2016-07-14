@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Received:" />
+
+    <TextView
+        android:id="@+id/txt_received_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send:" />
+
+    <TextView
+        android:id="@+id/txt_send_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <Button
+        android:id="@+id/btn_vibe_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vibe" />
+
+    <Button
+        android:id="@+id/btn_start_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start" />
+
+    <TextView
+        android:id="@+id/txt_xvalue_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X:" />
+
+    <TextView
+        android:id="@+id/txt_yvalue_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Y:" />
+
+    <TextView
+        android:id="@+id/txt_zvalue_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Z:" />
+
+</LinearLayout>

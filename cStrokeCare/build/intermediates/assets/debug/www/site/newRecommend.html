@@ -1,0 +1,219 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8">
+	<meta name="language" content="zh_TW">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../css/jquery.mobile-1.3.2.css" /> 
+	<style type="text/css">
+	.center {
+		margin: 0px auto;
+  }
+  .ui-bar-c {
+		/*background: linear-gradient(#Ec9E04, #efb136) repeat scroll 0% 0% #EEE;*/
+		background-image: -webkit-gradient(linear, left top, left bottom, from( #EC9E04 /*{c-bar-background-start}*/), to( #EFb136 /*{c-bar-background-end}*/)); /* Saf4+, Chrome */
+		background-image: -webkit-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Chrome 10+, Saf5.1+ */
+		background-image:    -moz-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* FF3.6 */
+		background-image:     -ms-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* IE10 */
+		background-image:      -o-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Opera 11.10+ */
+		background-image:         linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/);
+	}
+  /*.errorMessage {
+		color: #E74737;
+	}
+  .ui-input-text {
+		color: #ecf0f1;
+	}
+  .form-input {
+		width: 65% !important;
+  }
+  .form-button {
+		width: 35% !important;
+	}*/
+	</style>
+	<script src="../js/jquery-2.0.3.min.js"></script>
+	<script src="../js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="../js/nculib-utils.js"></script>
+	<script type="text/javascript" language="javascript" src="../cordova.js"></script>
+	<title>國立中央大學圖書館</title>
+<script type="text/javascript">
+	function load(){
+$("#userinfo").empty();
+	if (window.localStorage.getItem("tokens") != null) {
+	
+		var tokens = JSON.parse(window.localStorage.getItem("tokens"));
+		var temp = '<input type="button" value ="個人資料" onclick="change()"  data-role="button" data-icon="gear">';
+		
+		$("#userinfo").append(temp);
+		// var temp2='<a data-theme="d" data-icon="info" data-role="button"  onclick="logout()">登出</a> ';
+		// $("#userinfo").append(temp2);
+		$("#header").trigger('create');
+	}else{
+		var tokens=null;
+		
+		var temp3 ='<input type="button" value ="登入" onclick="login()"  data-role="button" data-icon="info">';
+		
+		$("#userinfo").html(temp3);
+		$("#header").trigger('create');
+	}
+	}
+</script>
+</head>
+
+<body onload="load()">
+
+<div data-role="page" id="page" data-theme="c">
+  <div data-role="header" data-theme="c" data-position="fixed" data-id="myheader" id="header">
+    <h1 class="ui-title">中央大學圖書館</h1>
+		<div class="ui-btn-right" data-role="controlgroup" data-type="horizontal" id="userinfo">
+		<!-- <a data-theme="d" data-icon="info" data-role="button" rel="external" href="../site/login.html">登入</a>	 -->
+		<!-- <a data-theme="d" data-icon="info" data-role="button"  href="site/login.html">登入</a> -->
+		</div>
+  </div>
+
+  <!--<div data-role="content">-->
+			<div id="content">
+	<div data-role="content">
+    <form id="search" action="site/search.html" method="get">				
+    	<fieldset class="ui-grid-solo">
+						<div class="ui-block-a form-input"><input type="text" name="textinput" id="textinput0" placeholder="請輸入書名 ..."/></div>
+						<div class="ui-block-a form-button"></div>
+						<div class="ui-block-a form-input"><input type="text" name="textinput" id="textinput1" placeholder="請輸入出版處 ..."/></div>
+						<div class="ui-block-a form-button"></div>
+						<div class="ui-block-a form-input"><input type="text" name="textinput" id="textinput2" placeholder="請輸入作者 ..."/></div>
+						<div class="ui-block-a form-button"></div>
+						<div class="ui-block-a form-input"><input type="text" name="textinput" id="textinput3" placeholder="書到是否優先借閱(請填0或1) ..."/></div>
+						<div class="ui-block-a form-button"></div>
+						<div class="ui-block-a form-input"><input type="password" name="textinput" id="textinput4" placeholder="帳號 ..."/></div>
+						<div class="ui-block-a form-button"></div>
+						<div class="ui-block-a form-input"><input type="password" name="textinput" id="textinput5" placeholder="密碼 ..."/></div>
+						<div class="ui-block-a form-button"><button type="button" name="submit" data-icon="search" data-inline="false" onclick= "send()">送出</button></div>
+			</fieldset>
+		</form>		
+</div>
+</div><!-- content -->
+	<!--</div>-->
+
+	<div class="clear"></div>
+
+	<div data-role="footer" data-theme="c" data-position="fixed" data-id="myfooter">
+			<div data-role="navbar">
+				<ul>
+				<li><a data-theme="c" data-icon="search" data-iconpos="top" onclick="changesearch()">館藏目錄</a></li>
+				<li><a data-theme="c" data-icon="info" data-iconpos="top" onclick="changenews()">最新消息</a></li>
+				<li><a data-theme="c" data-icon="gear" data-iconpos="top" onclick="changeopentime()">開放時間 </a></li>
+				<li><a data-theme="c" data-icon="gear" data-iconpos="top" onclick="changeservice()">服務項目</a></li>
+				<li><a data-theme="c" data-icon="info" data-iconpos="top" onclick="changenewrecommend()">新書推薦</a></li>
+				</ul>
+			</div>
+	  <!-- <p><h6><a href="mailto:ncu57407@ncu.edu.tw">聯絡我們</a> | (03)4267127 | &copy; 2013 NCU Library</h6></p> -->
+	</div><!-- footer -->
+
+
+</div><!-- page -->
+	<script>
+
+	var inputdata="";
+	var alertstring="";
+	function send(){
+		if (document.getElementById("textinput0").value=="" || document.getElementById("textinput1").value=="" || document.getElementById("textinput2").value=="" || document.getElementById("textinput3").value=="" || document.getElementById("textinput4").value=="" || document.getElementById("textinput5").value=="") {
+			alert("資料輸入不完全");
+		}
+		else{
+			if (document.getElementById("textinput0").value != "") {
+			
+				inputdata = "bookname="+document.getElementById("textinput0").value;
+			}
+			if (document.getElementById("textinput1").value != "") {
+				inputdata += "&publisher="+document.getElementById("textinput1").value;
+			};
+			if (document.getElementById("textinput2").value != "") {
+				inputdata += "&author="+document.getElementById("textinput2").value;
+			};
+			if (document.getElementById("textinput3").value != "0" && document.getElementById("textinput3").value != "1") {
+				alert("資料輸入錯誤");
+			}else{
+				inputdata += "&lend="+document.getElementById("textinput3").value;
+			}
+			if (document.getElementById("textinput4").value != "") {
+				inputdata += "&studentid="+document.getElementById("textinput4").value;
+			};
+			if (document.getElementById("textinput5").value != "") {
+				inputdata += "&password="+document.getElementById("textinput5").value;
+			};
+			$.ajax({
+				type: 'post',
+				data: inputdata,
+				dataType: 'html',
+				url: 'http://rapid.lib.ncu.edu.tw:8080/suggestbook/ensuresuggest.php',
+				success: function(html) {
+					
+					if (html.search("對")==461) {
+						alertstring= html.substring(html.search("對"), html.search("目")+1);
+					}else if (html.search("帳")==461) {
+						alertstring= html.substring(html.search("帳"), html.search("誤")+1);
+					}else if (html.search("錯")==467) {
+						alertstring= html.substring(html.search("錯")-6, html.search("料")+1);
+					}
+					else {
+						
+						alertstring= html.substring(html.search("您"), html.search("訊")+1);
+					}
+					alert(alertstring);
+					// if (html.search("作")) {
+					// 	alertstring+= "請輸入作者";
+					// };
+					// if (html.search("版")) {
+					// 	alertstring+= "請輸入出版處";
+					// };
+					// if (html.search("帳")) {
+					// 	alertstring+= "帳號、密碼輸入錯誤";
+					// };
+					// if (html.search("對")) {
+						
+					// 	alertstring+= html.substring(html.search("對"), html.search("目"));
+					// };
+					
+				},
+				error: function(html) {
+					alert('Network or System Error!');
+				}
+			});
+		}
+		
+		
+		
+	}
+	// $(document).on("pageinit", function() {
+	// 	var localStorage = window.localStorage;
+	// 	var token = localStorage.getItem("token");
+    function change(){
+    	window.location.href = "info.html";
+    }
+    function logout(){
+    	window.localStorage.clear();
+    	window.location.href = "../index.html";
+    }
+    function login(){
+    	window.location.href = "login.html";
+    }
+    function changesearch(){
+    	window.location.href = "../index-search.html";
+    }
+    function changenews(){
+    	window.location.href = "news.html";
+    }
+    function changeopentime(){
+    	window.location.href = "opentime.html";
+    }
+    function changeservice(){
+    	window.location.href = "service.html";
+    }
+    function changenewrecommend(){
+    	window.location.href = "newRecommend.html";
+    }
+	// });
+</script>
+</body>
+
+</html>

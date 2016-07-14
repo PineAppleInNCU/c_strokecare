@@ -1,0 +1,59 @@
+/*--------點我返回--------*/
+#a.ui-btn-active {
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+    font-style: white;
+}
+
+#b.ui-btn-active {
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+    font-style: white;
+}
+
+#c.ui-btn-active {
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+    font-style: white;
+}
+#d.ui-btn-active {
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+    font-style: white;
+}
+
+
+/*--------other--------*/
+#record_head
+{
+//color:#F8F8F8;
+font-family:Verdana;
+text-shadow:0px;
+background-color:#D8D8D8; 
+//font-size:13px;
+padding-top:18px;
+padding-bottom:18px;
+padding-left:15px;
+
+}
+
+#record_detail
+{
+font-family:Verdana;
+text-shadow:0px;
+background-color:#FFFFF0; 
+//font-size:13px;
+padding-top:18px;
+padding-bottom:18px;
+padding-left:22px;
+border-bottom:1px solid #D8D8D8;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

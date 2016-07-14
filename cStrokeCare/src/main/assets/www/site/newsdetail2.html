@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8">
+	<meta name="language" content="zh_TW">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../css/jquery.mobile-1.3.2.css" /> 
+	<script type="text/javascript" language="javascript" src="../cordova.js"></script>
+	<style type="text/css">
+	.center {
+		margin: 0px auto;
+  }
+  .ui-bar-c {
+		/*background: linear-gradient(#Ec9E04, #efb136) repeat scroll 0% 0% #EEE;*/
+		background-image: -webkit-gradient(linear, left top, left bottom, from( #EC9E04 /*{c-bar-background-start}*/), to( #EFb136 /*{c-bar-background-end}*/)); /* Saf4+, Chrome */
+		background-image: -webkit-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Chrome 10+, Saf5.1+ */
+		background-image:    -moz-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* FF3.6 */
+		background-image:     -ms-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* IE10 */
+		background-image:      -o-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Opera 11.10+ */
+		background-image:         linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/);
+	}
+	</style>
+	<script src="../js/jquery-2.0.3.min.js"></script>
+	<script src="../js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="../js/nculib-utils.js"></script>
+	<title>國立中央大學圖書館館藏目錄查詢-行動版</title>
+<script type="text/javascript">
+	
+	
+	function load4(){
+			var url = JSON.parse(window.localStorage.getItem("bookurl"));
+			var methodvalue="method=news_content&url="+url;
+			ajax(methodvalue);
+
+			// showLoading();
+
+			
+
+	}
+
+    }	
+
+    	function ajax(querys){
+	
+
+			$.ajax({
+				type: 'GET',
+				data: querys,
+				url: 'http://140.115.155.167/library.php',
+
+				success: function(json) {
+					// eval( "var obj="+ json);
+					alert(json);
+					$('#book-data').append(json);
+					
+	
+					$('#book-data').listview('refresh');
+					
+				}
+				
+			});
+
+
+	}
+</script>
+</head>
+
+<body onload="load4()">
+
+<!-- <div id="book-data"></div> -->
+
+ <div data-role="page" id="page" data-theme="c">
+
+
+  <div data-role="content">
+ 	<div id="content">
+	<div data-role="content" >
+		<div id="book-data">
+			gg
+		</div>
+</div>
+</div>
+	
+
+
+
+
+
+</div>
+
+</body>
+</html>

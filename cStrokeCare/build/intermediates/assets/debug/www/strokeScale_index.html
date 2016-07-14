@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+        </title>
+		<link rel="stylesheet" href="js/jquery.mobile-1.1.0.min.css" />
+        <link rel="stylesheet" href="my.css" />
+        <style>
+            /* App custom styles */
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile-1.1.0.min.js"></script>
+		<script type="text/javascript" charset="utf-8" src="js/cordova.js"></script>
+        <script type="text/javascript" >
+            document.addEventListener("deviceready",onDeviceReady,false);
+            
+            function onDeviceReady() {
+                document.addEventListener("backbutton", onBackKeyDown, false);
+            }
+            function onBackKeyDown() {    
+                navigator.app.backHistory();
+            }
+        </script>
+    </head>
+    <body>
+        <div data-role="page" id="page1">
+            <div data-theme="b" data-role="header">
+                <h2>
+                    中風因子評估工具
+                </h2>
+            </div>
+            <div data-role="content">
+                <h3>
+                    請選擇您的性別 :
+                </h3>
+                <h2>
+                </h2>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <div style=" text-align:center">
+                            <img style="width: 60px; height: px" src="img/male-icon.png" />
+                        </div>
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" data-transition="fade" data-theme="d" onclick="self.location.href='strokeScale_male.html'" data-icon="check" data-iconpos="right">
+                            男性
+                        </a>
+                    </div>
+                    <div class="ui-block-a">
+                        <div style=" text-align:center">
+                            <img style="width: 60px; height: px" src="img/female-icon.png" />
+                        </div>
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" data-transition="fade" data-theme="d" onclick="self.location.href='strokeScale_female.html'" data-icon="check" data-iconpos="right">
+                            女性
+                        </a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" data-transition="fade" data-theme="d" onclick="self.location.href='index.html'" data-icon="check" data-iconpos="right">
+                            上一頁
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div data-theme="b" data-role="footer">
+                <h3>
+                    Pinko
+                </h3>
+            </div>
+        </div>
+        <script>
+            //App custom javascript
+        </script>
+    </body>
+</html>

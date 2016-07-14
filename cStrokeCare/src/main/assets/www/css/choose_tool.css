@@ -1,0 +1,18 @@
+#choose_text{
+  font-size : 26pt;
+  font-weight: bold;
+  color : red;
+}
+#phone_div{
+  margin-top: 10%;
+}
+#watch_div{
+  margin-top: 20%;
+}
+#homepage_background{
+  text-align:center;
+}
+body{
+  background-image : url('background.jpg');
+  background-repeat :  repeat ;
+}

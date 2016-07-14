@@ -1,0 +1,31 @@
+#uploadall_btn{
+	margin-top:10%; 
+	text-align: center;
+}
+
+.track-date{
+	margin-top: 10px;
+	margin-bottom: 5px;
+	font-size: 18px;
+	padding-left: 20px;
+}
+
+.track-detail{
+	font-size: 18px;
+	border-bottom: 1px solid #ebebeb;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.track-1{
+	padding-left: 20px;
+}
+
+.track-2{
+	padding-left: 30px;
+}
+
+.track-3{
+	float: right;
+	padding-right: 20px;
+}

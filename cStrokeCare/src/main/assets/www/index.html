@@ -1,0 +1,55 @@
+<html>
+<head>
+<meta meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/choose_tool.css" >
+<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.css" >
+<script type="text/javascript" src = "js/jquery-2.0.3.min.js"></script>
+<script src="js/cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/bt.js"></script>
+<script language = "javascript">
+	//get mobile pixel
+	function get_pixel(){
+	  var height = $(window).height();
+	  var width = $(window).width();
+	  
+	  $("#phone").width(width*0.5);
+	  $("#phone").height(width*0.5);
+	  $("#watch").width(width*0.5);
+	  $("#watch").height(width*0.5);
+
+	  window.plugins = {
+			bt: cordova.require('cordova/plugin/bt')
+		};
+	}
+
+	function goto_bluetooth_test(){
+		window.plugins.bt.bluetooth_test(onSuccess_bt,onError_bt);
+	}
+
+	function goto_to_application(){
+		window.location.href = "i_index.html";
+	}
+
+	//detect mobile bluetooth -亂碼fix 2016/5/6 by pig84
+	function onSuccess_bt(result){
+		if(result == "Enabling Bluetooth..."){
+			alert("正在開啟藍芽...");
+		}
+			
+		else if (result == "Bluetooth has already enabled"){
+			alert("藍芽已開啟");
+		}
+		window.location.href = "w_index.html";
+	}
+	function onError_bt(result){
+		alert(result);
+		window.location.href = "w_index.html";
+	}
+</script>
+</head>
+<body onload="get_pixel()">
+<h2 align = center id = "choose_text">復建工具選擇</h2>
+<div id = "phone_div" align="center"><img id = "phone" src = "img/phone.png" onclick="goto_to_application()"></div>
+<div id = "watch_div" align="center"><img id = "watch" src = "img/watch.png" onclick="goto_bluetooth_test()"></div>
+</body>
+</html>

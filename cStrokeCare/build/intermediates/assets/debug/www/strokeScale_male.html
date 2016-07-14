@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html>
+ <head>
+ <title>中風因子評估工具-男性</title>
+ <link rel="stylesheet" href="js/jquery.mobile-1.0a1.min.css" />
+ <link rel="stylesheet" href="themes2/stroke-male.min.css" />
+ <script type="text/javascript" src="js/jquery-1.4.3.min.js"></script>
+ <script type="text/javascript" src="js/jquery.mobile-1.0a1.min.js"></script>
+ <script type="text/javascript" charset="utf-8" src="js/cordova.js"> </script>
+ <script type="text/javascript" >
+ 	document.addEventListener("deviceready", onDeviceReady, false);
+			
+	function onDeviceReady() {
+		document.addEventListener("backbutton", onBackKeyDown, false);
+	}
+
+	function onBackKeyDown() {    
+      	navigator.app.backHistory();
+    }
+
+	function doOutput()
+	{
+		var prob;
+		var sum=0,age=0,sbp=0,hyprx=0,diabetes=0,cigs=0,cvd=0,af=0,lvh=0;
+		var array = new Array("2.6","3.0","3.5","4.0","4.7","5.4","6.3","7.3","8.4",
+							"9.7","11.2","12.9","14.8","17.0","19.5","22.4","25.5","29.0",
+							"32.9","37.1","41.7","46.6","51.8","57.3","62.4","68.4","73.8",
+							"79.0","83.7","87.9");
+		var showtext="所評估之10年內中風機率為:";
+		
+	//	age = $('select[name="age"]').val();
+		age = parseInt($('select#age').val());
+		sbp = parseInt($('select#sbp').val());
+		hyprx = parseInt($('select#hyprx').val());
+		diabetes = parseInt($('select#diabetes').val());
+		cigs = parseInt($('select#cigs').val());
+		cvd = parseInt($('select#cvd').val());
+		af = parseInt($('select#af').val());
+		lvh = parseInt($('select#lvh').val());
+		
+		sum = age + sbp + hyprx + diabetes + cigs + cvd + af + lvh;	
+	
+	//	alert(sum);
+		
+		if(sum<=0)
+		{
+			showtext = "依目前篩選資料，您尚未符合高風險評估範圍，所以無法評估。";
+			alert(showtext);
+		
+		}else
+		{
+			showtext = showtext + array[sum-1]+"%";
+			alert(showtext);
+		}
+		
+	}
+ </script>
+ 
+</head>
+<body>
+ 
+<div>
+ 
+ <div>
+	<h1>中風因子檢測量表-男性</h1>
+ </div><!-- /header -->
+ 
+ <div>
+	 <form>
+		<li>
+		   Age(年紀)：
+		   <select id="age" name="age" >
+					 <option value="0">54-56</option>
+					 <option value="1">57-59</option>
+					 <option value="2">60-62</option>
+					 <option value="3">63-65</option>
+					 <option value="4">66-68</option>
+					 <option value="5">69-71</option>
+					 <option value="6">72-74</option>
+					 <option value="7">75-77</option>
+					 <option value="8">78-80</option>
+					 <option value="9">80-83</option>
+					 <option value="10">84-86</option>
+			</select>
+		</li>
+		
+		<li>
+		   SBP(收縮壓)：
+		   <select id="sbp" name="sbp">
+					 <option value="0">95-105</option>
+					 <option value="1">106-116</option>
+					 <option value="2">117-126</option>
+					 <option value="3">127-137</option>
+					 <option value="4">138-148</option>
+					 <option value="5">149-159</option>
+					 <option value="6">160-170</option>
+					 <option value="7">171-181</option>
+					 <option value="8">182-191</option>
+					 <option value="9">192-202</option>
+					 <option value="10">203-213</option>
+			</select>
+		</li>
+		
+		
+		<li>
+		   Hyp Rx(有無服服降血壓藥)：
+		   <select id="hyprx" name="hyprx">
+					 <option value="0">無</option>
+					 <option value="2">有</option>
+				
+			</select>
+			
+		</li>
+		
+		<li>
+		   Diabetes(糖尿病史):
+		   <select id="diabetes" name="diabetes">
+				 <option value="0">無</option>
+				 <option value="2">有</option>
+			</select>
+		</li>
+		
+		<li>
+		   Cigs(抽吸習慣)：
+		   <select id="cigs" name="cigs">
+				 <option value="0">無</option>
+				 <option value="3">有</option>
+			</select>
+		</li>
+		
+		<li>
+		   CVD(心肌梗塞、心絞痛、冠狀動脈血液灌流不足、間歇性跛行、充血性心衰竭)：
+		   <select id="cvd" name="cvd">
+					 <option value="0">無</option>
+					 <option value="3">有</option>
+			</select>
+		</li>
+		
+		<li>
+		   AF(心房顫震病史)：
+		   <select id="af" name="af">
+					 <option value="0">無</option>
+					 <option value="4">有</option>
+			</select>
+		</li>
+		
+		
+		<li>
+		   LVH(心電圖證實左心室肥大)：
+		   <select id="lvh" name="lvh">
+					 <option value="0">無</option>
+					 <option value="6">有</option>
+			</select>
+		</li>
+		
+		<br/>
+		<br/>
+		<br/>
+		
+		<input type="button" onclick="javascript:doOutput()" name="Submit" value="顯示評估結果">
+		
+	</form>
+ </div><!-- /content -->
+ 
+</div><!-- /page -->
+ 
+</body>
+</html>

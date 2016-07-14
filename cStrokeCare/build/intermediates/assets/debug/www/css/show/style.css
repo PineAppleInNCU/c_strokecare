@@ -1,0 +1,120 @@
+.show-page{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.show-header{
+	background: -webkit-linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* Standard syntax (must be last) */
+    border-bottom: #999391 1.5px solid;
+    box-shadow: 0px 1px 2px 1px #BEBDB8;
+}
+
+#finish_h {
+    line-height: 18px;
+    text-align: center;
+}
+
+#show_detail{
+	margin-top: 0px;
+	height: 250px;
+	margin: 0;
+	padding: 0;
+}
+
+#show_date{
+	text-align: center;
+	font:20px 微軟正黑體;
+	margin-bottom: 0px;
+}
+
+#do-content ul{
+	list-style: none;
+	margin: 0px !important;
+}
+
+#do-content ul li{
+	float: left;
+	width: 100%;
+	margin-left: -25px;
+}
+
+#do-content ul li div{
+	border-bottom:inset 1px #cacaca;/*邊框樣式、寬度、顏色*/
+	height: 50px;
+}
+
+.show_left{
+	float: left;
+	padding-left:20px;
+	font: 20px 微軟正黑體 ;
+}
+
+.show_right{
+	float: right;
+	font: 20px 微軟正黑體 ;
+}
+
+.show_img{
+	float: left;
+	display: block;
+	max-height: 50px;
+	max-width: 50px;
+}
+
+#show_point{
+	text-align: center;
+}
+
+#congra{
+	font: 30px 微軟正黑體 ;
+	margin: 0;
+	padding: 0;
+}
+
+#show_point img{
+	max-width: 30px;
+	max-height: 30px;
+	margin-top: 10px;
+	margin-bottom: -5px;
+} 
+
+#show_point p{
+	padding: 0;
+	margin: 0;
+	display: inline-block;
+	font: 20px 微軟正黑體 ;
+	padding-left: 20px;
+}
+
+#upload_btn{
+	text-align: center;
+	margin-top: 50px;
+}
+
+#again_btn{
+	text-align: center;
+	display: inline-block;
+	margin-top: 20px;
+	width: 49%;
+}
+
+#leave_btn{
+	text-align: center;
+	display: inline-block;
+	margin-top: 20px;
+	width: 50%;
+}
+
+.show_btns{
+	max-height: 35px;
+	max-width: 150px;
+}

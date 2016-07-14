@@ -1,0 +1,26 @@
+<html>
+<head>
+<meta meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src = "js/jquery-2.0.3.min.js"></script>
+<script src="js/cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/bt.js"></script>
+<script language = "javascript">
+	//detect mobile bluetooth
+	function get_status(){
+		window.plugins = {
+			bt: cordova.require('cordova/plugin/bt')
+		};
+		window.plugins.bt.bluetooth_test(onSuccess_bt,onError_bt);
+	}
+	function onSuccess_bt(result){
+		alert(result);
+	}
+	function onError_bt(result){
+		alert(result);
+	}
+</script>
+</head>
+<body onload = "get_status()">
+<h2 align = center>藍芽偵測</h2>
+</body>
+</html>

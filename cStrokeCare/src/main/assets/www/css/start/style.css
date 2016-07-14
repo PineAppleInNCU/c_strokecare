@@ -1,0 +1,117 @@
+
+.tab-container{
+	height: 100%;
+	padding: 0;
+	margin: 0; 
+}
+
+.tab-page{
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+#start_content{
+	margin: 0;
+	padding: 0;
+}
+
+.detail{
+	margin-top: 0px;
+	height: 350px;
+	margin: 0;
+	padding: 0;
+}
+
+#btext{
+	font-size: 15px
+}
+
+.detail ul{
+	list-style: none;
+	margin: 0px !important;
+}
+.detail ul li{
+	float: left;
+	width: 100%;
+	height: 55px;
+	border-bottom:inset 1px #cacaca;/*邊框樣式、寬度、顏色*/
+	margin-left: -25px;
+
+}
+
+.detail label{
+	float: left;
+	margin-right: 10%;
+	font: 20px 微軟正黑體 ;
+	margin-top: 12px
+}
+
+.detail select{
+	float: right;
+	font: 微軟正黑體 ;
+	margin-right: 15px;
+}
+
+.detail_img{
+	float: left;
+	max-height: 50px;
+	max-width: 50px;
+}
+
+.barp{
+	margin-top: 5px;
+	margin-bottom: -5px
+}
+
+#main-text{
+	float: left;
+	margin-left: 20px;
+	font: 23px 微軟正黑體;
+	line-height: 20px;
+}
+
+.btns{
+	width: 100%;
+  	display:block;
+  	vertical-align: middle;
+}
+
+#ready_img{
+	display:block;
+  	margin:0 auto;
+  	/*margin-left:-60px;
+  	padding-left: 50%;*/
+  	vertical-align: middle;
+  	width: 120px;
+  	height: 120px;
+  	/*clear: both;*/
+}
+
+.bluetooth_img{ 
+	display:inline-block;
+	margin: auto; 	
+  	vertical-align: middle;
+  	margin-left: 20px;
+  	width: 18px;
+  	height: 33px;
+}
+
+#sound_img{
+  	display:inline-block;	
+	margin: auto; 
+  	vertical-align: middle;
+  	margin-left: 10px;
+  	width: 28px;
+  	height: 25px;
+}
+
+#detail_ul .ui-btn{
+	background:transparent !important; 
+	text-align: right;
+	border: 0;
+	box-shadow: none;
+	width:125px;
+	float: right;
+	font-size: 25px; 
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Read me -->
+    <Preference
+        android:key="@string/preference_key_read_me"
+        android:title="@string/preference_option_read_me" />
+    <Preference
+        android:id="@+id/sensor_x"
+        android:key="@string/preference_key_send"
+        android:title="@string/preference_option_send" />
+    <Preference
+	    android:id="@+id/sensor_y"
+	    android:key="@string/preference_key_send"
+	    android:title="@string/preference_option_send" />
+    <Preference
+	    android:id="@+id/sensor_z"
+	    android:key="@string/preference_key_send"
+	    android:title="@string/preference_option_send" />
+</PreferenceScreen>

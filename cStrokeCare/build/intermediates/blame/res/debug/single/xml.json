@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\android\\C-StrokeCare\\cStrokeCare\\build\\intermediates\\res\\merged\\debug\\xml\\config.xml",
+        "source": "D:\\android\\C-StrokeCare\\cStrokeCare\\src\\main\\res\\xml\\config.xml"
+    },
+    {
+        "merged": "D:\\android\\C-StrokeCare\\cStrokeCare\\build\\intermediates\\res\\merged\\debug\\xml\\preference.xml",
+        "source": "D:\\android\\C-StrokeCare\\cStrokeCare\\src\\main\\res\\xml\\preference.xml"
+    }
+]

@@ -1,0 +1,136 @@
+#ready-page{
+    margin: 0;
+    padding: 0;
+}
+#ready-content {
+    margin: 0;
+    padding: 0;
+}
+.do-header {
+    background: -webkit-linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgb(140, 222, 220), rgb(105, 189, 228));
+    /* Standard syntax (must be last) */
+    border-bottom: #999391 1.5px solid;
+    box-shadow: 0px 1px 2px 1px #BEBDB8;
+}
+.action_h {
+    line-height: 18px;
+    text-align: center;
+}
+.back {
+    vertical-align: middle;
+    float: left;
+    width: 40px;
+    height: 40px;
+}
+.back img {
+    width: 100%;
+    height: 100%;
+}
+.know{
+  float: right;
+  right:0;
+  margin-top: -40px;
+  margin-left: 0;
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+}
+
+.know img{
+  width: 100%;
+  height: 100%;
+}
+.process_div {
+    background-color: #c9c9c9;
+    width: 100%;
+    padding-top: 1px;
+    text-align: center;
+}
+.f-times {
+    display: inline-block;
+    font: 25px 微軟正黑體;
+    text-align: center;
+    margin-top: -1px;
+    margin-bottom: 2px;
+}
+.t-times {
+    display: inline-block;
+    font: 20px 微軟正黑體;
+    text-align: center;
+    margin-top: -1px;
+    margin-bottom: 2px;
+}
+.notice_p {
+    text-align: center;
+    font: 20px 微軟正黑體;
+    margin-right: 10px;
+    margin-left: 10px;
+    
+}
+.img_action {
+    display: block;
+    margin: 0 auto;
+	width: 80%;
+}
+
+.video_action{
+    margin: 0 auto;
+	width: 80%;
+
+}
+.btns {
+    width: 100%;
+    display: block;
+    vertical-align: middle;
+    margin-top: 20px;
+}
+#video_img {
+    display: inline-block;
+    margin: auto;
+    padding-left: 50%;
+    margin-left: -153px;
+    vertical-align: middle;
+    margin-right: 10px;
+    width: 26px;
+    height: 25px;
+}
+#picture_img {
+    display: inline-block;
+    margin: auto;
+    vertical-align: middle;
+    margin-right: 20px;
+    width: 31px;
+    height: 25px;
+}
+#start_img {
+    display: inline-block;
+    margin-right: 0 auto;
+    margin-right: 0 auto;
+    vertical-align: middle;
+    width: 120px;
+    height: 120px;
+    /*clear: both;*/
+}
+
+.bluetooth_img {
+    display: inline-block;
+    margin: auto;
+    vertical-align: middle;
+    margin-left: 20px;
+    width: 18px;
+    height: 33px;
+}
+#sound_img {
+    display: inline-block;
+    margin: auto;
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 28px;
+    height: 25px;
+}

@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html> 
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1">
+  <title>Reha</title>
+  <link rel="stylesheet" type="text/css" href="css/page.css"/>
+  <link rel="stylesheet" type="text/css" href="css/jquery.mobile.custom.structure.min.css" >
+  <!--link rel="stylesheet" type="text/css" href="css/jquery.mobile.custom.theme.min.css" -->  
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/login/style.css" />
+  <script src="js/cordova.js"></script>
+  <script src="js/jquery-1.8.2.min.js"></script>
+  <script src="js/jquery.mobile.custom.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/video.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/bluetooth.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/page.js"></script>
+
+  <script type="text/javascript" charset="utf-8">function exitFromApp(){navigator.app.exitApp();}</script>
+  <script type="text/javascript" charset="utf-8">   
+    document.addEventListener("deviceready", onDeviceReady, false);    
+    var db = window.openDatabase("Dummy_DB", "1.0", "Dummy_DB", 200000); 
+    var tab="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; //x: y: z: 間距用	
+	  var tabb="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; //mySql data-head用
+	  var tabbb=tabb+"&nbsp&nbsp&nbsp&nbsp&nbsp";  //mySql data-detail用
+    var tabl="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; //mySql data-head用
+    var side_global=0;
+    var level_global=0;
+    var firsttime=0;     //第一次split的x不要理他
+    var xyz=new Array(); //外接硬體的xyz數據
+    var errortime=0;     //確保達到2000時不會關閉兩次
+    var tempid ;
+    var id_count;   //上傳server個人index count
+    var reha_name;  //復健動作名稱
+    var fd ;        //日期
+    var ft ;     //結束時間 
+    var Startime;
+    function onDeviceReady(){             
+      db.transaction(populateDB, errorCB, successCB);
+      document.addEventListener("backbutton", onBackKeyDown, false);
+      playback();
+      playmusic();
+      hasID();
+      /*if(namecheck){
+        getUserID();
+        $.mobile.changePage("#home",null,true,true);
+      }
+      else{
+        alert('第一次登入，請輸入ID。');
+      }
+        /*
+    window.plugins = {
+            BluetoothPlugin: cordova.require( 'cordova/plugin/bluetooth' )
+        }; 
+        */
+      }
+
+    //按下返回鍵do no-op
+    function onBackKeyDown() {    
+      /*navigator.app.backHistory();
+      if(type==2){
+        navigator.compass.clearWatch(watchID);
+      }else{
+        navigator.accelerometer.clearWatch(watchID);
+      }
+      watchID = null;
+      document.getElementById('accelerometer').innerHTML = "Waiting...";
+      cc=0;
+      count=0;
+      test=0;
+      num=0;
+      rank=0;
+        com=0; //compass X秒內給我就定位!
+        ready=0;
+        head=0;
+        head_temp=0;
+        head_test=0;
+        head_count=0;
+        acce=0; //1後聽到beep才開始!
+        error_count=0;
+        ear_count=0;
+        shift_count=0;
+        stopback();
+        document.getElementById("times").innerHTML="已成功 0 次"; 
+        document.getElementById("errortimes").innerHTML="，失敗 0 次";*/
+      }    
+
+    //***************************Bluetooth(舊手錶 非PEBBLE)***************************
+
+    /*function enableBT() {
+    $.mobile.changePage("#ajaxloader",null,true,true);
+    if(type==3){	
+	     $.mobile.loading( 'show', {
+          text: "Detecting...",
+          textVisible: true,
+          theme: 'a',
+          textonly: false,
+          html: ""
+    });
+	}else{        
+         $.mobile.loading( 'show', {
+          text: "Loading...",
+          textVisible: true,
+          theme: 'a',
+          textonly: false,
+          html: ""
+    });
+    }    	
+	window.plugins.BluetoothPlugin.enable( function() {
+	//	alert( '藍芽開啟成功' );
+		discoverDevices();		
+	}, function(error) {
+	//	alert( '開啟藍芽錯誤：' + error );
+	} );
+    }
+
+    function disableBT() {
+	window.plugins.BluetoothPlugin.disable( function() {		
+		alert( '藍芽關閉成功' );		
+	}, function(error) {
+	//	alert( '關閉藍芽錯誤： ' + error );
+	} );
+    }
+
+    function discoverDevices() {       
+    window.plugins.BluetoothPlugin.discoverDevices( 
+	function(devices) {        
+		$('#bt-devices-select').html('');
+    	for( var i = 0; i < devices.length; i++ ) {
+    		$('#bt-devices-select').append( $( '<option value="' + devices[i].address + '">' + devices[i].name + '</option>' ) );
+    	}
+    	listUUIDs();
+		
+    }, function(error) { 
+        $.mobile.loading( 'hide' );
+        if(type==3){
+				$.mobile.changePage("#pose",null,true,true);
+		}else{
+                $.mobile.changePage("#picture",null,true,true);
+         }
+      } );
+    }
+    // WMLAB藍芽的mac address：00 11 67 50 AA BB 
+	// 強制只與WMLAB連線
+	//var givendevice = "00:11:67:50:AA:BB";
+	var givendevice = "00:11:67:35:00:00";
+	
+    function listUUIDs() {
+	window.plugins.BluetoothPlugin.getUUIDs( 
+	    function(uuids) {
+	    	$('#bt-device-uuids').html('');	
+		    for( var i = 0; i < uuids.length; i++ ) {
+			    $('#bt-device-uuids').append( $( '<option value="' + uuids[i] + '">' + uuids[i] + '</option>' ) );
+		     }
+		    openRfcomm();
+	   }, 
+	   
+	   function(error) {
+	       $.mobile.loading( 'hide' ); 
+           if(type==3){
+				$.mobile.changePage("#pose",null,true,true);
+			}else{
+                $.mobile.changePage("#picture",null,true,true);
+            }
+	    }, givendevice );                  //WMLAB
+    }
+
+	
+    function openRfcomm() {
+	window.plugins.BluetoothPlugin.connect(
+			function(socketId) {
+				g_socketid = socketId;
+				console.log( 'Socket-id: ' + g_socketid );					
+				readRfcomm();
+			},
+	 		
+			function(error) {	
+				$.mobile.loading( 'hide' ); 
+				if(type==3){
+				$.mobile.changePage("#pose",null,true,true);
+				}else{
+                $.mobile.changePage("#picture",null,true,true);
+                }
+			},
+			givendevice,                   //WMLAB
+			$( '#bt-device-uuids' ).val()  //WMLAB的uuid
+	);
+   }
+   
+   function closeRfcomm() {     
+    stopback();
+    bttest=0;
+    btcount=0;
+    document.getElementById("bttimes").innerHTML="已完成0次"; 
+	window.plugins.BluetoothPlugin.disconnect(
+			function() {
+			//	alert('連線關閉成功');
+			},
+			function(error) {
+		   //	alert( '錯誤:' + error );
+			},
+			g_socketid
+	);
+   }
+   
+
+   function readRfcomm() { 
+    if(type==3){	
+	$.mobile.changePage("#contectaware",null,true,true);
+	$.mobile.loading( 'hide' ); 
+	}else{
+    $.mobile.changePage("#btlow",null,true,true);  
+    $.mobile.loading( 'hide' ); 
+	loopback();
+	}
+	window.plugins.BluetoothPlugin.read( bp_readSuccess, bp_readError, g_socketid );		
+   }
+
+   function bp_readError( error ) {
+	//alert( '資料讀取結束' );
+	if(type == 3 && errortime == 0){
+	       $.mobile.loading( 'hide' );  
+           navigator.notification.beep(1); 		   
+		   window.plugins.BluetoothPlugin.disconnect( //關閉連接
+			function() {
+			//	alert('連線關閉成功');
+			},
+			function(error) {
+		   //	alert( '錯誤:' + error );
+			},
+			g_socketid
+	        );
+		   disableBT(); //關閉藍芽
+		   $.mobile.changePage("#pose",null,true,true);
+		       
+	}
+   }
+
+   function bp_readSuccess( p_data ) {       
+    //$('#bt-data-dump').append( p_data +'<br>' );     
+    if(firsttime == 0){
+           firsttime = 1;    
+    }else{
+           xyz = p_data.split(/[XYZ]/gi);
+		   if(type==3){
+           document.getElementById("showxyz").innerHTML = 'X:' + xyz[0] + tab +
+                                                          'Y:' + xyz[1] + tab +
+                                                          'Z:' + xyz[2] ;
+	       }else{
+           document.getElementById("xyzposition").innerHTML = 'X:' + xyz[0] + tab +
+                                                              'Y:' + xyz[1] + tab +
+                                                              'Z:' + xyz[2] ;		   		   		  		 
+		   }
+    switch(type){
+   
+     case 0 :  
+       
+       break;  
+       
+     case 1 :  
+        
+       if(bttest==0){
+           if ( 1020 < Math.abs(xyz[1]) ){
+                bttest=1;                    
+           }
+        }else{
+           if ( Math.abs(xyz[1]) < 800 ){
+                bttest=0;
+                btcount=btcount+1;          
+                navigator.notification.vibrate(1000);                                           
+                document.getElementById("bttimes").innerHTML="已完成 "+btcount+" 次"; 
+                if(btcount==btnum){
+                btcount=0; 
+                stopbt();				
+                }          
+            }      
+        }
+       break;
+       
+     case 2 :
+	 
+       if(bttest==0){
+           if ( 1020 < Math.abs(xyz[1]) ){
+           bttest=1;             
+           }
+        }else{
+           if ( Math.abs(xyz[1]) < 800 ){
+                bttest=0;
+                btcount=btcount+1;          
+                navigator.notification.vibrate(1000);                                           
+                document.getElementById("bttimes").innerHTML="已完成 "+btcount+" 次"; 
+                if(btcount==btnum){
+                btcount=0;  
+                stopbt();				
+                }                
+            }               
+        }
+       break;
+       
+     case 3 : 
+	 
+       if ( Math.abs(xyz[0])==2000 && Math.abs(xyz[1])==2000 && Math.abs(xyz[2])==2000){		   
+		   $.mobile.loading( 'hide' );  
+           navigator.notification.beep(1); 		   
+		   window.plugins.BluetoothPlugin.disconnect( //關閉連接
+			function() {
+			//	alert('連線關閉成功');
+			},
+			function(error) {
+		   //	alert( '錯誤:' + error );
+			},
+			g_socketid
+	        );
+		   alert( 'Emergency' );	
+		   disableBT(); //關閉藍芽
+		   $.mobile.changePage("#pose",null,true,true);
+		   errortime = 1;
+		   }    
+       break;  
+   
+     case 4 :
+   
+        if(bttest==0){
+           if ( 1020 < Math.abs(xyz[1]) ){
+                bttest=1;                              
+           }
+        }else if(bttest==1){
+           if ( Math.abs(xyz[1]) < 800 ){
+                bttest=2;           
+           }
+                
+        }else{
+           if ( 1020 < Math.abs(xyz[1]) ){
+                bttest=0;
+                btcount=btcount+1;          
+                navigator.notification.vibrate(1000);
+                document.getElementById("bttimes").innerHTML="已完成 "+btcount+" 次";                                                           
+                if(btcount==btnum){
+                btcount=0; 
+                stopbt();				
+                }                 
+            }      
+        }
+       break;
+               
+    }	
+    }
+    	
+	// Continue reading...
+	window.plugins.BluetoothPlugin.read( bp_readSuccess, bp_readError, g_socketid );	
+	return;
+   }
+    // 外接硬體偵測完畢的後續動作
+   function stopbt() {   
+      var btd = new Date();
+      var btyear = btd.getFullYear();
+      var btmonth = btd.getMonth()+1;
+      var btdate = btd.getDate();
+      var bthour = btd.getHours();
+      var btminute = btd.getMinutes();
+      if(btmonth<10){btmonth="0"+btmonth;}
+      if(btdate<10){btdate="0"+btdate;}
+      if(bthour<10){bthour="0"+bthour;}
+      if(btminute<10){btminute="0"+btminute;}
+      var btfd = btyear+""+btmonth+""+btdate;  //date
+      var btft = bthour+":"+btminute;          //time  
+      var btalldata=btft+""+tabb+""+type+""+tabb+""+btnum;
+      stopback();  
+      closeRfcomm();	                       //關閉與外接硬體的連結
+      insert(btfd,btalldata); 
+      $.mobile.changePage("#pose",null,true,true);
+      btshowAlert() ;                                                    
+      bttest=0;
+      btcount=0;
+      btnum=0;
+      document.getElementById("bttimes").innerHTML="已完成0次";
+      alert("{date:'"+btyear+"-"+btmonth+"-"+btdate+"',time:'"+bthour+":"+btminute+":00',action:'"+type+"'}");
+      $.ajax(
+              {
+                url:"http://health.ncu.cc/David_Code/index.php?command=add",
+                type:"POST",
+                data: {
+                        data: "{\"date\":\""+btyear+"-"+btmonth+"-"+btdate+"\",\"time\":\""+bthour+":"+btminute+":00\",\"action\":\""+type+"\"}"
+                      },
+                dataType:"html",
+                success:function(b){
+                  //alert("songyy");
+                },
+                fail:function(b) {
+                  alert( "Request failed: " + b );
+                }
+              }
+            );
+}*/
+function update()
+{
+      var total = (count+error_count);
+      $.ajax(
+      {
+        url:"http://health.ncu.cc/isupload.php?command=add",
+        type:"POST",
+        data: {
+         data: "{\"id\":\""+tempid+"\",\"date\":\""+fd+"\",\"starttime\":\""+Startime+"\",\"endtime\":\""+ft+"\",\"action\":\""+type+"\",\"angle\":\""+rank_var+"\",\"suggest\":\""+num+"\",\"success\":\""+count+"\",\"fail\":\""+error_count+"\",\"total\":\""+total+"\",\"count\":\""+id_count+"\"}"
+        },
+        dataType:"html",
+        success:function(b){
+          //alert("上傳成功!!");
+        },
+        fail:function(b) {
+          alert( "Request failed: " + b );
+        }
+      });
+}
+
+function uploadALL(){
+    db.transaction(function(tx){    
+        tx.executeSql('SELECT * FROM Score',[],function(tx,rs){           
+          $.each(rs.rows,function(index){
+            var row = rs.rows.item(index);
+            if(row['date']==null){
+              //do nothing
+              //這是登入用name欄位(其他為null 所以不上傳)
+            }
+            else{
+              $.ajax(
+              {
+                url:"http://health.ncu.cc/isupload.php?command=add",
+                type:"POST",
+                data: {
+                  data: "{\"id\":\""+row['name']+"\",\"date\":\""+row['date']+"\",\"starttime\":\""+row['starttime']+"\",\"endtime\":\""+row['endtime']+"\",\"action\":\""+row['action']+"\",\"angle\":\""+row['angle']+"\",\"suggest\":\""+row['suggest']+"\",\"success\":\""+row['success']+"\",\"fail\":\""+row['fail']+"\",\"total\":\""+row['total']+"\",\"count\":\""+(row['id']-1)+"\"}"
+                },
+                dataType:"html",
+                success:function(b){
+                },
+                fail:function(b) {
+                  alert( "Request failed: " + b );
+                }
+              });
+            }   
+          });
+          alert("上傳成功"); 
+        }); 
+    }); 
+}  
+   //***************************mySQL*************************** 
+   
+    //create table 
+    function populateDB(tx) {    
+      tx.executeSql('CREATE TABLE IF NOT EXISTS Score (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,date TEXT,starttime TEXT,endtime TEXT,action INTEGER,angle INTEGER,suggest INTEGER,success INTEGER,fail INTEGER,total INTEGER)');         
+    }
+
+    //function will be called when an error occurred
+    function errorCB(err) {
+      alert("Error processing SQL: "+err.code);
+    }
+
+    //function will be called when process succeed and then show old record
+    function successCB() { 
+      refresh();       
+    }
+    
+    //insert record into SoccerPlayer sql
+    function insert(a,b,c,d,e,f,g,h,i,j){
+      db.transaction(
+        function(tx){  
+          tx.executeSql('INSERT INTO Score(name, date,starttime,endtime,action,angle,suggest,success,fail,total) VALUES (?,?,?,?,?,?,?,?,?,?)', [a,b,c,d,e,f,g,h,i,j]);  
+        }, 
+        errorCB, 
+        function(){                                                
+          refresh();                                   
+        });          
+    }
+    
+    //ready to show data to record page
+    function refresh(){
+     db.transaction(queryDB,errorCB);
+    }
+
+    //select all data from SoccerPlayer
+    function queryDB(tx){
+     tx.executeSql('SELECT * FROM Score',[],querySuccess,errorCB);
+   }
+
+    //fetch data one by one and put it to record page
+    function querySuccess(tx,result){
+      var a=1;
+      var b;
+      $('#SoccerPlayerList').empty();
+      $.each(result.rows,function(index){
+        var row = result.rows.item(index);
+        if(index ==0){
+          //不顯示只有name的欄位(第一次登入ID用)
+        }      
+        else{
+          if(a==1){
+            $('#SoccerPlayerList').append('<div id="head">日期'+tabb+row['date']+'</div>');
+            $('#SoccerPlayerList').append('<div id="head">動作'+tabb+'角度'+tabb+'建議'+tabb+'成功'+tabb+'失敗'+tabb+'總計</div>');
+            a=2;    
+            b=row['date'];
+          }else{
+            if(b!=row['date']){
+              $('#SoccerPlayerList').append('<div id="head">日期'+tabb+row['date']+'</div>');
+              $('#SoccerPlayerList').append('<div id="head">動作'+tabb+'角度'+tabb+'建議'+tabb+'成功'+tabb+'失敗'+tabb+'總計</div>');
+            }              
+            b=row['date'];
+          }
+          switch(row['action']){
+            case 0:
+              reha_name="上舉";
+            break;
+            case 1:
+              reha_name="下放";
+            break;
+            case 2:
+              reha_name="右手摸耳(肩)";
+            break;
+            case 3:
+              reha_name="左手摸耳(肩)";
+            break;
+            case 4:
+              reha_name="右手摸耳";
+            break;
+            case 5:
+              reha_name="左手摸耳";
+            break;
+            case 6:
+              reha_name="踢腿";
+            break;
+            case 7:
+              reha_name="挺腹";
+            break;
+            case 8:
+              reha_name="側抬腿";
+            break;
+          }
+          $('#SoccerPlayerList').append('<div id="detail">開始時間:&nbsp'+row['starttime']+tab+'結束時間:&nbsp'+row['endtime']+'</div>');                  
+          $('#SoccerPlayerList').append('<div id="detail">'+reha_name+tabbb+row['angle']+tabbb+row['suggest']+tabbb+row['success']+tabbb+row['fail']+tabbb+row['total']+'</div>');
+        }
+      });
+    }
+
+   function addUserID(){
+      tempid = document.getElementById('text_id').value;
+      if(tempid.length !=7){
+        alert("長度不等於7碼，請再次輸入!!");
+        return false;
+      }
+      db.transaction(
+        function(tx){  
+          tx.executeSql('INSERT INTO Score (name) VALUES (?)', [tempid]);   
+          id_count=0;          
+        }, 
+        errorCB, 
+        function(){                                                
+          refresh();                                   
+        }); 
+      $.mobile.changePage("#home",null,true,true);          
+    }  
+
+
+    function hasID(){
+      db.transaction(function(tx){    
+        tx.executeSql('SELECT * FROM Score',[],function(tx,rs){           
+            for(var i=0;i<rs.rows.length;i++){ 
+                if(rs.rows.item(i)['name']!=null){
+                  tempid = rs.rows.item(i)['name'];
+                  id_count = (rs.rows.length-1);   //找到目前的database index
+                  $.mobile.changePage("#home",null,true,true);
+                  alert('Hi '+rs.rows.item(i)['name']);
+                  return;
+                }
+            }
+            alert("第一次登入，請輸入ID");
+        }); 
+      }); 
+    }
+
+
+    </script>
+    
+    <script>
+    //***************************Rehabilitation***************************
+//acceleration
+var watchID = null;
+var test=0;  //動作程序到哪
+var count=0; //已成功次數 
+var num=0;   //目標次數  
+var type=0;  //復健類型
+var cc=0;    //點我返回點到哪
+var error_count=0; //失敗次數
+
+
+//bluetooth
+var bttest=0;  //動作程序到哪
+var btcount=0; //已成功次數 
+var btnum=0;   //目標次數
+
+/* ---Compass--- */
+var com=0;
+
+/* ---平移與摸耳朵一定秒數後跳出---*/
+var ear_count=0;
+var shift_count=0;
+
+/*-------開始時間--------*/
+var ear_count=0;
+var shift_count=0;
+
+var Shour;   //記錄開始的時間
+var Sminute;
+var Ssecond;
+function getStartime(){
+  var Stime = new Date();   ///開始時間
+  Shour = Stime.getHours();
+  Sminute = Stime.getMinutes();
+  Ssecond = Stime.getSeconds();
+  if(Shour<10){Shour="0"+Shour;}
+  if(Sminute<10){Sminute="0"+Sminute;}
+  if(Ssecond<10){Ssecond="0"+Ssecond;}
+  Startime = Shour+":"+Sminute+":"+Ssecond;
+}
+
+
+/*function compassReady() {
+    //$('#swaylink').addClass('ui-disabled');
+    navigator.compass.clearWatch(watchID);
+    watchID = null;
+    com=0;
+    ready=0;
+    head=0;
+    head_temp=0;
+    head_test=0;
+    head_count=0;
+    var options = { frequency: 1 };
+    watchID = navigator.compass.watchHeading(comSuccess, comError, options);
+    loopback();
+	setTimeout(function() {          //1秒後播請就定位音樂
+    r_media.play(); 	    
+    r_media.seekTo(0);  
+  }, 1000); 
+	readyAlert("請就定位",3000);     //3秒後關閉alert
+
+}
+var head_test=0; //步驟到哪
+var head_count=0;//次數到哪
+var ready=0;
+//平移
+//1s***-> 開始-vi-vi-vi-再次就定位 -> 1s*** -> 開始-vi-vi-vi-掌聲
+function comSuccess(heading) {
+  var element = document.getElementById('accelerometer');
+  head_temp = heading.magneticHeading;
+  element.innerHTML = 'Heading: ' + head_temp;
+  com++;
+    if(com==900){   //1s就定位~ 每做完一次就重新定位一次
+     head = head_temp;
+     s_media.play(); 	  //開始
+     s_media.seekTo(0);
+     ready=1;
+	  //var head_count=0;
+	}	
+  if(ready==1){
+   shift_count++;        
+	  if(shift_count==1100){   //1.1秒內未成功，則重新開始
+     interupt();	
+   }
+
+   if( (head+40 < head_temp && head_temp < head+55) || (head-55 < head_temp && head_temp < head-40) || (head-55+360 < head_temp && head_temp < head-40+360) || (head+40-360 < head_temp && head_temp < head+55-360) ){
+
+		head_test++;       //第幾個45度了
+		head=head_temp;    //把現在位置給head(以head為基準點左右45度)
+		shift_count=0;
+		if(head_test==4){  //一次轉4個45度
+		   head_count=head_count+1;   //head_count已經做完幾次了
+		   com=0;
+		   ready=0;
+		   head_test=0;
+		   
+		   document.getElementById("times").innerHTML="已完成 "+head_count+" 次"; 
+		   if(head_count==num){   //level_var表示目標次數
+	           //playmusic(5);    //恭喜，已達成目標
+            f_media.play(); 	    
+            f_media.seekTo(0);
+            stopWatch();
+
+          }else{
+		       //playmusic(4); //已完成，請再次就定位
+          a_media.play(); 	    
+          a_media.seekTo(0);
+        }
+
+      }else{
+       navigator.notification.vibrate(1000);
+     }
+   }
+ }
+}
+
+function comError(compassError) {
+  alert('Compass Error: ' + compassError.code);
+}
+*/
+/* ---Accelerometer---  */
+function startWatch() {
+ alert("復健即將開始，請準備就定位！");
+ getStartime();
+ acce=0;
+   var options = { frequency: 1 }; // 每1ms更新
+   watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+   loopback();
+   setTimeout(function() {          //1秒後播請就定位音樂
+    r_media.play(); 	    
+    r_media.seekTo(0);  
+  }, 1000);                
+   //readyAlert("請就定位",3000);     //3秒後關閉alert
+ }
+
+// Stop
+function stopWatch() {
+  if (watchID) {     
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth()+1;
+    var date = d.getDate();
+    var hour = d.getHours();
+    var minute = d.getMinutes();
+    var second = d.getSeconds();
+    if(month<10){month="0"+month;}
+    if(date<10){date="0"+date;}
+    if(hour<10){hour="0"+hour;}
+    if(minute<10){minute="0"+minute;}
+    if(second<10){second="0"+second;}
+    fd = year+"-"+month+"-"+date;        //日期
+    ft = hour+":"+minute+":"+second;     //結束時間 
+    /*switch(type){
+       case 0:
+            reha_name="上舉";
+          break;
+          case 1:
+            reha_name="下放";
+          break;
+          case 2:
+            reha_name="右手摸耳(肩)";
+          break;
+          case 3:
+            reha_name="左手摸耳(肩)";
+          break;
+          case 4:
+            reha_name="右手摸耳";
+          break;
+          case 5:
+            reha_name="左手摸耳";
+          break;
+          case 6:
+            reha_name="踢腿";
+          break;
+          case 7:
+            reha_name="挺腹";
+          break;
+          case 8:
+            reha_name="側抬腿";
+          break;
+    }*/
+	  var totals_count = count+error_count;  //如果是平移則head_count + error_count；其他為count + error_count
+    //var alldata=ft+""+tabbb+""+reha_name+""+tabbb+""+num+""+tabbb+""+error_count+""+tabbb+""+totals_count;   //12:0x   摸耳朵  5  2   7
+    stopback();
+    id_count++;            
+    insert(tempid,fd,Startime,ft,type,rank_var,num,count,error_count,totals_count); //MySql存入手機資料庫
+    update(); //上傳到server
+    $.mobile.changePage("#pose",null,true,true); //跳到->四種復健選擇畫面
+    showAlert() ;         //跳出 恭喜畫面 + 掌聲音樂
+    acce=0;
+    test=0;
+    count=0;
+    error_count=0;
+    com=0;
+    ready=0;
+    head=0;
+    head_temp=0;
+    head_test=0;
+    head_count=0;
+    ear_count=0;
+    shift_count=0;
+    document.getElementById("times").innerHTML="已成功 0 次";
+    document.getElementById("times").innerHTML="，失敗 0 次";  
+    document.getElementById('accelerometer').innerHTML = "Waiting..."; 
+    navigator.accelerometer.clearWatch(watchID);    
+    watchID = null;
+  }
+}
+/*-----上舉過程不垂直時中斷!!!------*/
+function interupt(){    
+		//playmusic(6);           /*-----動作錯誤，請從新開始 error.mp3-----*/
+		e_media.play(); 	    
+		e_media.seekTo(0);
+    com=0;
+    ready=0;		
+    head=0;
+    head_temp=0;
+	  head_test=0;  //第幾個45度
+		acce=0;       //1s後在開始
+    test=0;       //做到哪 
+		ear_count=0;  //
+		shift_count=0;//
+		error_count++;
+    document.getElementById("errortimes").innerHTML="，失敗 "+error_count+" 次";			
+  }
+
+// onSuccess
+//num 目標次數 rank_var幾度
+var acce=0;
+function onSuccess(acceleration) {
+
+//if(typeof(side_global) == "undefined")
+//        {
+//          alert( "怎麼不見了！");
+//              return false;
+//        }
+//switch(side_global){
+//            case "1":
+//           alert("左手!");
+//           break;
+//          case "2":
+//           alert("右手!");
+//           break;
+//}
+
+
+var element = document.getElementById('accelerometer');
+element.innerHTML = 'X: ' + Math.floor(acceleration.x*100)/100 + tab +
+'Y: ' + Math.floor(acceleration.y*100)/100 + tab +
+'Z: ' + Math.floor(acceleration.z*100)/100 + tab ;	
+acce++;
+if(acce>800)
+   {      //1s定位
+     switch(type)
+     {
+
+     //-------------上舉 
+	 //1s*** -> 開始-vi-vi-再次就定位 -> 開始-vi-vi-掌聲
+   case 0 :  
+
+   if(test==0) {
+    if ( -5 < acceleration.y && acceleration.y < -1 && 9 < Math.abs(acceleration.x) && Math.abs(acceleration.x) < 10){
+            //playmusic(3); /*---------開始-------*/
+            s_media.play(); 	    
+            s_media.seekTo(0);
+            test=1;                   
+      } 
+        }else if(test==1){
+          if(7 < Math.abs(acceleration.z) || -7 > acceleration.y){            
+            interupt();
+            if((count+error_count)==num){
+              stopWatch();    
+            } 
+          }
+          else if ( 1.7 < acceleration.y && acceleration.y < 3 ){
+            if(rank_var==90){    //上舉90度
+              test=0;
+              count++;                                         
+              document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+              acce=0;
+              if((count+error_count)==num){
+                //alert("success");
+                stopWatch();    
+                /*---------恭喜，已達成目標-------*/ 
+                navigator.notification.vibrate(1000);
+                f_media.play(); 	    
+                f_media.seekTo(0);
+              }else{
+                /*---------已完成，請再次就定位-------*/ 
+                navigator.notification.vibrate(1000);
+                a_media.play(); 	    
+                a_media.seekTo(0);
+              }
+            }else{
+              navigator.notification.vibrate(500);
+              test=2;
+            }
+
+          }               
+        }else if(test==2){
+          if(7 < Math.abs(acceleration.z)){				    
+            interupt();
+            if((count+error_count)==num){
+              stopWatch();    
+            }
+          }					        
+          if (6 < Math.abs(acceleration.y) && Math.abs(acceleration.y) < 6.5 ){
+				    if(rank_var==120){  //上舉120度
+              test=0;
+              count++;                                         
+              document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+              acce=0;
+              if((count+error_count)==num){
+                stopWatch();    
+                /*---------恭喜，已達成目標-------*/	
+                navigator.notification.vibrate(1000);	
+                f_media.play(); 	    
+                f_media.seekTo(0);	  
+              }else{
+                /*---------已完成，請再次就定位-------*/
+                navigator.notification.vibrate(1000);
+                a_media.play(); 	    
+                a_media.seekTo(0);	   
+              }
+            }else{
+             navigator.notification.vibrate(500);
+             test=3;
+           }
+
+         }               
+        }else{    //上舉120度
+         if(7 < Math.abs(acceleration.z)){				    
+          interupt();
+          if((count+error_count)==num){
+              stopWatch();    
+            }
+        }	
+        if (8.5 < Math.abs(acceleration.y) && Math.abs(acceleration.y) < 9 ){
+         test=0;
+         count++;                                                  
+         document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+         acce=0;
+         if((count+error_count)==num){
+          stopWatch();        
+          /*---------恭喜，已達成目標-------*/
+          navigator.notification.vibrate(1000);
+          f_media.play(); 	    
+          f_media.seekTo(0);	   
+        }else{
+          /*---------已完成，請再次就定位-------*/ 
+          navigator.notification.vibrate(1000);
+          a_media.play(); 	    
+          a_media.seekTo(0);   
+        }                  
+      }               
+    }	 
+    break;
+     //-----------------------------下放 
+	 //1s*** -> 開始-vi-vi-再次就定位 -> 開始-vi-vi-掌聲
+  case 1 :  
+
+    if(test==0){
+      if ( -5 < acceleration.y && acceleration.y < -1 && 9 < Math.abs(acceleration.x) && Math.abs(acceleration.x) < 10){
+                //playmusic(3);       /*---------開始-------*/ 
+        s_media.play(); 	    
+        s_media.seekTo(0);
+        test=1;       
+      }
+    }else{
+      if(6 < Math.abs(acceleration.z)){				    
+        interupt();
+        if((count+error_count)==num){
+              stopWatch();    
+            }
+      }        
+      if (-8 < acceleration.y && acceleration.y < -7.5 ){
+        test=0;
+        count++;                                                   
+        document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+        acce=0;
+        if((count+error_count)==num){
+          //0.5秒後跑掌聲音樂然後每4秒輪回跑
+          stopWatch();   
+          //playmusic(5);    /*---------恭喜，已達成目標-------*/ 
+          navigator.notification.vibrate(1000);		
+          f_media.play(); 	    
+          f_media.seekTo(0);
+        }else{
+          //playmusic(4);    /*---------已完成，請再次就定位-------*/ 	
+					//0.5秒後跑掌聲音樂然後每4秒輪回跑
+          navigator.notification.vibrate(1000);
+          a_media.play(); 	    
+          a_media.seekTo(0); 
+        }
+      }
+    }               
+  break;
+
+	case 2 : //摸耳右手 lv2
+
+    if(test==0){
+      if (-2.5 < acceleration.x && acceleration.x < 2.5 && -2.5 < acceleration.y && acceleration.y < 2.5 && -9.8 < acceleration.z && acceleration.z < -8.5){
+        //playmusic(3);   /*---------開始-------*/ 
+        s_media.play(); 	    
+        s_media.seekTo(0);
+        test=1;           
+      }
+    }
+    else{
+      ear_count++;
+		  //if(ear_count==1100)
+      //{    //1.1秒內未成功，則重新開始 [平移跟摸耳朵專有]
+			//  interupt();
+			//}
+      if(4 < acceleration.x && acceleration.x < 8 && 5 < acceleration.y && acceleration.y < 9 && -4 < acceleration.z && acceleration.z < 4){				    
+        test=0;
+        count++;                                         
+        document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+        ear_count=0;
+        acce=0;
+        if((count+error_count)==num){
+          stopWatch();   
+          //playmusic(5);    /*---------恭喜，已達成目標-------*/		
+          navigator.notification.vibrate(1000);
+          f_media.play(); 	    
+          f_media.seekTo(0);			   
+        }
+        else{
+      	  //playmusic(4);    /*---------已完成，請再次就定位-------*/ 
+          navigator.notification.vibrate(1000);
+          a_media.play(); 	    
+          a_media.seekTo(0);
+        }                  
+      }			
+    }
+  break;
+
+  case 3 :  //摸耳左手lv2
+
+  if(test==0){
+    if (-2.5 < acceleration.x && acceleration.x < 2.5 && -2.5 < acceleration.y && acceleration.y < 2.5 && -9.8 < acceleration.z && acceleration.z < -8.5){
+        //playmusic(3);   /*---------開始-------*/ 
+      s_media.play();       
+      s_media.seekTo(0);
+      test=1;           
+    }
+  }
+  else{
+    ear_count++;
+    //if(ear_count==1100)
+    //{    //1.1秒內未成功，則重新開始 [平移跟摸耳朵專有]
+    //  interupt();
+    //}
+    if(-8 < acceleration.x && acceleration.x < -4 && 3 < acceleration.y && acceleration.y < 7 && -1 < acceleration.z && acceleration.z < 4){           
+      test=0;
+      count++;                                         
+      document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+      ear_count=0;
+      acce=0;
+      if((count+error_count)==num){
+        stopWatch();   
+            //playmusic(5);    /*---------恭喜，已達成目標-------*/   
+        navigator.notification.vibrate(1000);
+        f_media.play();       
+        f_media.seekTo(0);         
+      }
+      else{
+        //playmusic(4);    /*---------已完成，請再次就定位-------*/ 
+        navigator.notification.vibrate(1000);
+        a_media.play();      
+        a_media.seekTo(0);
+      }                  
+    }     
+  }
+  break;
+/*case 7 : //摸耳右手 lv1   治療師說不必 這太簡單
+       
+       if(test==0)
+       {
+            if (-2.5 < acceleration.x && acceleration.x < 2.5 && -2.5 < acceleration.y && acceleration.y < 2.5 && -9.8 < acceleration.z && acceleration.z < -8.5){
+                //playmusic(3);   //---------開始-------
+        s_media.play();       
+          s_media.seekTo(0);
+        test=1;           
+        
+            }
+        }
+        else
+        {
+        ear_count++;
+        //if(ear_count==1100)
+        //{    //1.1秒內未成功，則重新開始 [平移跟摸耳朵專有]
+        //  interupt();
+        //}
+              if(7 < acceleration.x && acceleration.x < 9.9 && 0 < acceleration.y && acceleration.y < 4 && -1 < acceleration.z && acceleration.z < 4)
+              {           
+              test=0;
+              count++;                                         
+                      document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+              ear_count=0;
+              acce=0;
+              if((count+error_count)==num)
+              {
+                    stopWatch();   
+                    //playmusic(5);    //---------恭喜，已達成目標------- 
+                    navigator.notification.vibrate(1000);
+                    f_media.play();       
+                    f_media.seekTo(0);         
+              }
+                      else
+                      {
+                     //playmusic(4);    //---------已完成，請再次就定位------- 
+                      navigator.notification.vibrate(1000);
+                 a_media.play();      
+                   a_media.seekTo(0);
+              }                  
+              }     
+      }
+    break;
+    case 8 :  //摸耳左手lv1
+       
+       if(test==0)
+       {
+            if (-2.5 < acceleration.x && acceleration.x < 2.5 && -2.5 < acceleration.y && acceleration.y < 2.5 && -9.8 < acceleration.z && acceleration.z < -8.5){
+                //playmusic(3);   //---------開始-------
+        s_media.play();       
+          s_media.seekTo(0);
+        test=1;           
+        
+            }
+        }
+        else
+        {
+        ear_count++;
+        //if(ear_count==1100)
+        //{    //1.1秒內未成功，則重新開始 [平移跟摸耳朵專有]
+        //  interupt();
+        //}
+              if(-9.9 < acceleration.x && acceleration.x < -7 && -3 < acceleration.y && acceleration.y <3 && -3 < acceleration.z && acceleration.z < 3)
+              {           
+              test=0;
+              count++;                                         
+                      document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+              ear_count=0;
+              acce=0;
+              if((count+error_count)==num)
+              {
+                    stopWatch();   
+                    //playmusic(5);    //---------恭喜，已達成目標-------   
+                    navigator.notification.vibrate(1000);
+                    f_media.play();       
+                    f_media.seekTo(0);         
+              }
+                      else
+                      {
+                     //playmusic(4);    //---------已完成，請再次就定位------- 
+                      navigator.notification.vibrate(1000);
+                 a_media.play();      
+                   a_media.seekTo(0);
+              }                  
+              }     
+      }
+      break;*/
+    case 4 : //摸耳右手 lv3
+
+    if(test==0)
+    {
+      if (-2.5 < acceleration.x && acceleration.x < 2.5 && -2.5 < acceleration.y && acceleration.y < 2.5 && -9.8 < acceleration.z && acceleration.z < -8.5){
+                //playmusic(3);   /*---------開始-------*/ 
+                s_media.play();       
+                s_media.seekTo(0);
+                test=1;           
+
+              }
+            }
+            else
+            {
+              ear_count++;
+        //if(ear_count==1100)
+        //{    //1.1秒內未成功，則重新開始 [平移跟摸耳朵專有]
+        //  interupt();
+        //}
+        if(-2 < acceleration.x && acceleration.x < 2 && 6 < acceleration.y && acceleration.y < 9 && -1 < acceleration.z && acceleration.z < 2)
+        {           
+          test=0;
+          count++;                                         
+          document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+          ear_count=0;
+          acce=0;
+          if((count+error_count)==num)
+          {
+            stopWatch();   
+                    //playmusic(5);    /*---------恭喜，已達成目標-------*/   
+                    navigator.notification.vibrate(1000);
+                    f_media.play();       
+                    f_media.seekTo(0);         
+                  }
+                  else
+                  {
+                     //playmusic(4);    /*---------已完成，請再次就定位-------*/ 
+                     navigator.notification.vibrate(1000);
+                     a_media.play();      
+                     a_media.seekTo(0);
+                   }                  
+                 }     
+               }
+               break;
+    case 5 :  //摸耳左手lv3
+
+    if(test==0)
+    {
+      if (-2.5 < acceleration.x && acceleration.x < 2.5 && -2.5 < acceleration.y && acceleration.y < 2.5 && -9.8 < acceleration.z && acceleration.z < -8.5){
+                //playmusic(3);   /*---------開始-------*/ 
+                s_media.play();       
+                s_media.seekTo(0);
+                test=1;           
+
+              }
+            }
+            else
+            {
+              ear_count++;
+        //if(ear_count==1100)
+        //{    //1.1秒內未成功，則重新開始 [平移跟摸耳朵專有]
+        //  interupt();
+        //}
+        if(-2 < acceleration.x && acceleration.x < 2 && 7.5 < acceleration.y && acceleration.y < 9 && -1 < acceleration.z && acceleration.z < 2)
+        {           
+          test=0;
+          count++;                                         
+          document.getElementById("times").innerHTML="已完成 "+count+" 次"; 
+          ear_count=0;
+          acce=0;
+          if((count+error_count)==num)
+          {
+            stopWatch();   
+                    //playmusic(5);    /*---------恭喜，已達成目標-------*/   
+                    navigator.notification.vibrate(1000);
+                    f_media.play();       
+                    f_media.seekTo(0);         
+                  }
+                  else
+                  {
+                     //playmusic(4);    /*---------已完成，請再次就定位-------*/ 
+                     navigator.notification.vibrate(1000);
+                     a_media.play();      
+                     a_media.seekTo(0);
+                   }                  
+                 }     
+               }
+               break;
+
+
+
+             }/*--switch--*/
+           }/*--acce--*/
+
+         }
+         function onError() {
+           alert("錯誤:加速感測器發生錯誤!");
+         }
+         </script>
+
+         <script>
+//start後alert"請就定位"3秒後關閉
+function readyAlert(msg,duration)
+{
+ var el = document.createElement("div");
+ el.setAttribute("style","background-color:white;font-size:500%;display:table-cell; vertical-align:middle;");
+ el.innerHTML = msg;
+ setTimeout(function(){
+  el.parentNode.removeChild(el);
+},duration);
+ document.body.appendChild(el);
+}
+</script>
+
+<script>
+//num 目標  rank_var 幾度
+var rank_var; //幾度!
+//取得radio的值 -> 目標次數+幾度
+function get_radio()
+{
+    var level = parseInt($('select#level-choice').val()); ////level:目標次數
+    var rank = $("input[name='rank-choice']:checked").val(); //rank:幾度
+    var side = $("input[name='side-choice']:checked").val(); //side:左右手 有成功?
+    var level_ear = $("input[name='level_ear_choice']:checked").val(); //level_ear:程度
+	if( typeof(level) == "undefined"){ // 注意檢查完全沒有選取的寫法，這行是精華
+    alert( "請選擇次數！");
+    return false;
+  }
+  else
+  {
+    if(type==0){
+      if( typeof(rank) == "undefined"){ 
+        // 注意檢查完全沒有選取的寫法，這行是精華
+        alert( "請選擇角度！");
+        return false;
+      }
+      else{
+        rank_var=rank;
+        switch(rank){
+          case "90":
+          var angle="90度";
+        break;
+        case "120":
+          var angle="120度";
+        break;
+        case "180":
+          var angle="180度";
+        break;
+        }
+      }   
+    }
+    else if(type==2)//有成功??
+    { 
+      rank_var = 0;
+      if(typeof(side) == "undefined")
+      {
+          alert( "請選擇左右手！");
+          return false;
+        }
+        side_global=side;
+        
+        if(typeof(level_ear) == "undefined")
+        {
+          alert( "請選擇難易度！");
+          return false;
+        }
+        level_global=level_ear;
+        if(side==1)//左手
+        {
+          if(level_ear==2)//左手lv2(肩)
+          {
+            type=3;
+          }
+          else if(level_ear==3)//左手lv3(耳)
+          {
+            type=5;
+          }
+        }
+        else if(side=2)//右手
+        {
+          if(level_ear==2)//右手lv2(肩)
+          {
+            type=2;
+          }
+          else if(level_ear==3)//右手lv3(耳)
+          {
+            type=4;
+          }
+        }
+      }
+      else{  //下放
+        rank_var=0;
+      }  
+      //請做x度o次
+      //document.getElementById("a").style.background="#303030 ";
+      //document.getElementById("b").style.background="#303030 ";
+      //document.getElementById("c").style.background="#303030 ";
+      //document.getElementById("d").style.background="#303030 ";
+      $('.d').removeClass('ui-btn-active');                       
+    }
+    num=level;
+	 $("input:radio").attr("checked", false);   //使radio沒有被勾選
+   $.mobile.changePage("#low",null,true,true);	
+	 acce=0; //一定要歸零!
+  count=0;
+  error_count=0;
+  document.getElementById("run").innerHTML="請成功做"+((type==1) ? angle : "")+num+"次";
+  document.getElementById("times").innerHTML="已完成 0 次"; 
+  document.getElementById("errortimes").innerHTML="，失敗 0 次"; 
+    startWatch();
+}
+
+</script>
+
+<!--script>
+//手環目標次數      
+    var btnumber;  
+    function btset(btnumber){
+        if(btnumber=="2"){
+        btcount=0;
+        btnum=2;               
+        document.getElementById("btrun").innerHTML="目標：2 次";
+        enableBT();                       
+        }else if(btnumber=="4"){ 
+        btcount=0;       
+        btnum=4;        
+        document.getElementById("btrun").innerHTML="目標：4 次";  
+        enableBT(); 
+        }else{ 
+        btcount=0;     
+        btnum=6;        
+        document.getElementById("btrun").innerHTML="目標：6 次";   
+        enableBT(); 
+        }
+    }
+  </script--> 
+
+  <script>     
+
+//做哪種復健   
+function ttype(nnumber){
+        if(nnumber=="0"){       //上舉
+          type=0;         
+          document.getElementById("spicture").src="css/images/raise.png";
+          document.getElementById("sspicture").src="css/images/raise.png";
+         // document.getElementById("btpicture").src="css/images/raise.png";
+          document.getElementById("rank_div").style.display = 'block';	
+		      //document.getElementById("rank_first").innerHTML ="90";
+		      //document.getElementById("rank_second").innerHTML ="120";
+		      //document.getElementById("rank_third").innerHTML ="180";
+		      document.getElementById("choice_picture").src="css/images/raise_angle.png"; 
+          document.getElementById("side_div").style.display = 'none';
+          document.getElementById("side_div").style.display = 'none';
+          document.getElementById("level_ear_div").style.display = 'none';
+        }else if(nnumber=="1"){ 
+           //下放     
+          type=1;         
+          document.getElementById("spicture").src="css/images/lower.png";        
+          document.getElementById("sspicture").src="css/images/lower.png";
+          // document.getElementById("btpicture").src="css/images/lower.png";
+          document.getElementById("rank_div").style.display = 'none';
+          document.getElementById("side_div").style.display = 'none';
+          document.getElementById("level_ear_div").style.display = 'none';
+        //document.getElementById("choice_picture").src="css/images/lower_angle.png"; 
+        }else if(nnumber=="2"){ 
+        //摸耳朵  
+          type=2;  
+          document.getElementById("spicture").src="css/images/ear.png";        
+          document.getElementById("sspicture").src="css/images/ear.png";
+          //document.getElementById("btpicture").src="css/images/ear.png"; 
+          document.getElementById("rank_div").style.display = 'none';
+          document.getElementById("side_div").style.display = 'block';
+          document.getElementById("level_ear_div").style.display = 'block';
+        }/*else {  
+        //平移         
+       // type=4;                
+          document.getElementById("spicture").src="css/images/shift.png";
+          document.getElementById("sspicture").src="css/images/shift.png";
+         // document.getElementById("btpicture").src="css/images/shift.png";
+          document.getElementById("rank_div").style.display = 'none';
+          document.getElementById("side_div").style.display = 'none';
+          document.getElementById("level_ear_div").style.display = 'none';
+        }   */   
+
+}
+</script>
+
+<script>        
+/*---------- 點我返回 ----------*/
+function ctheme(color){
+
+  stopWatch();
+  
+    document.getElementById("a").style.background="#303030 ";
+    document.getElementById("b").style.background="#303030 ";
+    document.getElementById("c").style.background="#303030 ";
+    document.getElementById("d").style.background="#303030 ";
+  }
+
+  </script>
+
+  <script>     
+//針對情境感知      
+function settype(){
+  type=3;
+  enableBT(); 		
+}
+</script>
+
+<script>
+var timer;  //must be global variable so latter can be used by other function to stop
+function showAlert(){
+  navigator.notification.alert(
+            '您獲得獎勵積分'+count+'點',    // message
+            alertDismissed,               // callback
+            '恭喜破關Congratulations',    // title
+            '確認'                        // buttonName
+            );
+         setTimeout(function() {          //0.6秒後播掌聲音樂，然後每四秒在播一次
+          p_media.play();
+          timer=setInterval(function() 
+          {
+            p_media.seekTo(0);
+            p_media.play();           
+          }, 4000);     
+        }, 600);                
+       }
+
+       function alertDismissed(){    
+         p_media.stop();
+         p_media.seekTo(0);
+         clearInterval(timer);   
+         timer = null;	 
+       } 
+       </script>
+
+<!--script>
+var bttimer;  //must be global variable so latter can be used by other function to stop
+function btshowAlert(){
+        navigator.notification.alert(
+            '您獲得獎勵積分'+btnum+'點', // message
+            btalertDismissed,            // callback
+            '恭喜破關Congratulations',   // title
+            '確認'                       // buttonName
+        );
+         setTimeout(function() {           //0.6秒後跑掌聲音樂然後每4秒輪回跑
+            p_media.play();
+            bttimer=setInterval(function() {
+			          p_media.seekTo(0);
+                      p_media.play();          
+                      }, 4000);        
+            }, 600);   
+        btnum=0;			
+}
+
+function btalertDismissed(){    
+     p_media.stop();
+     p_media.seekTo(0);	 
+     clearInterval(bttimer);    
+     bttimer = null;	 
+} 
+</script-->
+
+<script>
+var r_media = null; 
+var p_media = null;  
+var s_media = null; 
+var a_media = null; 
+var f_media = null; 
+var e_media = null; 
+
+function playmusic() {
+
+  var urlr = "/android_asset/www/css/images/ready.mp3";   /*-----請就定位 ready.mp3-----*/	   
+  r_media = new Media(urlr,        
+   function() {         
+   },        
+   function(err) {
+     //  console.log("Music Error: "+err);
+   });	
+
+    var urlp = "/android_asset/www/css/images/plause.mp3";  //掌聲音樂
+    p_media = new Media(urlp,        
+     function() {         
+     },        
+     function(err) {
+     //  console.log("Music Error: "+err);
+   });
+
+    var urls = "/android_asset/www/css/images/start.mp3";   /*-----開始 start.mp3-----*/
+    s_media = new Media(urls,        
+     function() {         
+     },        
+     function(err) {
+     //  console.log("Music Error: "+err);
+   });
+
+    var urla = "/android_asset/www/css/images/again.mp3";   /*-----已完成，請再次就定位 again.mp3-----*/
+    a_media = new Media(urla,        
+     function() {         
+     },        
+     function(err) {
+     //  console.log("Music Error: "+err);
+   });
+
+    var urlf = "/android_asset/www/css/images/finish.mp3";  /*-----恭喜，已達成目標 finish.mp3-----*/
+    f_media = new Media(urlf,        
+     function() {         
+     },        
+     function(err) {
+     //  console.log("Music Error: "+err);
+   });
+
+    var urle = "/android_asset/www/css/images/error.mp3";   /*-----動作錯誤，請從新開始 error.mp3-----*/	   
+    e_media = new Media(urle,        
+     function() {         
+     },        
+     function(err) {
+     //  console.log("Music Error: "+err);
+   });	
+
+  }
+
+  </script>
+
+  <script>
+var back_media = null;  //must be global variable so latter can be used by other function to stop
+//mus decide which music to play
+function playback() {
+    var url = "/android_asset/www/css/images/marry.mp3";   //遊戲背景音樂
+    back_media = new Media(url,        
+     function() {         
+     },        
+     function(err) {
+     });	
+
+  }
+
+  var backtimer;
+  function loopback(){
+   back_media.play();
+   backtimer=setInterval(function() {
+    back_media.seekTo(0);
+    back_media.play();
+  }, 112000);        
+ }
+
+ function stopback(){
+   back_media.stop();
+   back_media.seekTo(0);
+   clearInterval(backtimer);    
+   backtimer = null;
+ }
+
+ </script>
+
+ <script>
+ function playvideo(url){
+  openpopupvideo(url);
+    //window.plugins.videoPlayer.play(url);
+  }
+  function openpopupvideo(url){
+    $("#videoTag").empty();
+    $("#videoTag").append(
+      '<source src="'+url+'" type="video/mp4">'
+      );
+  }
+  </script>
+
+<script>
+  $(document).on('vmousedown', '#login_btn', function () {
+    $('#login_img').attr('src','img/u12_mouseDown.png');
+  });
+  $(document).on('vmouseup', '#login_btn', function () {
+    $('#login_img').attr('src','img/u12.png');
+  });
+  $(document).on('vmousecancel', '#login_btn', function () {
+    $('#login_img').attr('src','img/u12.png');
+  });
+</script>
+
+
+</head>
+
+<body>
+  <!-- insert ID if no exists ID -->
+  <div data-role="page" id="newID"> 
+    <div id="ID_header">
+      <h1></h1>
+    </div>
+
+    <div id="ID_content">
+      <img src="img/u10.png" id="login_p1">
+      <div id="input_div">
+        
+        <input type="text" id="text_id" placeholder="收案代號" name="ID">
+        <img src="img/u7.png" id="input_img">
+      </div>   
+      <div onclick="addUserID()" id="login_btn" ><img src="img/u12.png" id="login_img"></div>
+    
+    <div id="ID_footer">
+      <img src="img/u14.png" id="login_p2">
+    </div>
+	</div> 
+	</div>
+
+
+  <!--  登入/紀錄/離開畫面  -->
+  <div data-role="page" id="home"> 
+    <div data-role="header">
+     <h1>MedicalSuit</h1>
+   </div>
+   <div data-role="content" id="home">
+    <a href="#atrain" data-role="button" data-icon="star">新手訓練 - Train</a>
+    <a href="#pose" data-role="button" data-icon="forward">開始 - Start</a>
+    <a href="#record" data-role="button" data-icon="search">紀錄 - Record</a>   
+    <a onclick="self.location.href='ebook.html'" data-role="button" data-icon="star">電子書 - Ebook</a>
+    <a onclick="self.location.href='strokeScale_index.html'" data-role="button" data-icon="star">中風量表 - StrokeScale</a>
+    <button  onclick="exitFromApp()" data-icon="delete">離開 - Exit</button>  
+  </div>
+</div>    
+
+<!--  新手訓練總覽首頁  -->
+<div data-role="page" id="atrain"> 	
+ <div data-role="header">
+   <a href="#home" data-icon="home" data-iconpos="notext"></a>
+   <h1>MedicalSuit</h1>
+ </div> 
+
+ <div data-role="content"> 
+   <div class="imgdiv">
+     <img src="css/images/train_schematic.png">
+   </div>
+   <a href="#btrain" data-role="button" id="train_btn">開始</a>
+ </div>
+</div>  
+
+<!--  新手訓練  -->
+<div data-role="page" id="btrain"> 
+	<div data-role="header" data-theme="a">
+   <a href="#atrain" data-icon="back" data-iconpos="notext"></a>
+   <h1>MedicalSuit</h1>
+   <div data-role="navbar">
+     <ul>
+      <li><a href="#" data-href="tab-1" class="ui-btn-active">手機握法</a></li>
+      <li><a href="#" data-href="tab-2">復健流程</a></li>
+      <li><a href="#" data-href="tab-3">動作示範</a></li>
+      <li><a href="#" data-href="tab-4">錯誤動作</a></li>
+    </ul>
+  </div><!-- navbar -->
+</div><!-- header -->
+
+<div class="tab-container">
+  <div id="tab-1" class="tab-page">
+   <div data-role="content">
+     <div class="imgdiv"><img src="css/images/hand.png"></div>
+   </div>
+ </div>
+ <div id="tab-2" class="tab-page">
+   <div data-role="content">
+    <h2 style="color:red">新手訓練</h2>
+    <div><img src="css/images/d1_1.png"></div>
+    <div><h2>1.訓練流程</h2><div class="imgdiv"><img src="css/images/d1_2.png"></div></div>
+    <div><h2>2.訓練開始</h2><div class="imgdiv"><img src="css/images/d1_3.png"></div></div>
+
+    <h2 style="color:red">登入</h2>
+    <div><img src="css/images/d2_1.png"></div>
+    <div><h2>1.復健動作選擇</h2><div class="imgdiv"><img src="css/images/d2_2.png"></div></div>
+    <div><h2>2.復健動作示範</h2><div class="imgdiv"><img src="css/images/d2_3.png"></div></div>
+    <div><h2>3.次數、角度選擇</h2><div class="imgdiv"><img src="css/images/d2_4.png"></div></div>
+    <div><h2>4.復健開始</h2><div class="imgdiv"><img src="css/images/d2_5.png"></div></div>
+    <div><h2>5.完成畫面</h2><div class="imgdiv"><img src="css/images/d2_6.png"></div></div>
+    <div><h2>6.紀錄查看</h2><div class="imgdiv"><img src="css/images/d2_7.png"></div></div>
+  </div>
+</div>
+<div id="tab-3" class="tab-page">
+ <div data-role="content">	
+  <a data-role="button" href="#videoWindow" data-rel="popup" data-position-to="window" data-transition="pop" onclick="playvideo('file:///android_asset/www/video/accurate_raise.mp4')">上舉示範影片</a>
+  <a data-role="button" href="#videoWindow" data-rel="popup" data-position-to="window" data-transition="pop" onclick="playvideo('file:///android_asset/www/video/accurate_lower.mp4')" >下放示範影片</a>
+  <!--<a data-role="button" onclick="playvideo('file:///android_asset/www/video/accurate_shift.mp4')" >平移示範影片</a>-->
+  <a data-role="button" href="#videoWindow" data-rel="popup" data-position-to="window" data-transition="pop" onclick="playvideo('file:///android_asset/www/video/accurate_ear.mp4')">耳朵示範影片</a>
+</div>
+</div>
+<div id="tab-4" class="tab-page">
+ <div data-role="content">
+  <a data-role="button" href="#videoWindow" data-rel="popup" data-position-to="window" data-transition="pop" onclick="playvideo('file:///android_asset/www/video/inaccurate_raise.mp4')">上舉錯誤示範影片</a>
+  <a data-role="button" href="#videoWindow" data-rel="popup" data-position-to="window" data-transition="pop" onclick="playvideo('file:///android_asset/www/video/inaccurate_lower.mp4')">下放錯誤示範影片</a>
+  <!--<a data-role="button" onclick="playvideo('file:///android_asset/www/video/inaccurate_shift.mp4')" >平移錯誤示範影片</a>-->
+  <a data-role="button" href="#videoWindow" data-rel="popup" data-position-to="window" data-transition="pop" onclick="playvideo('file:///android_asset/www/video/inaccurate_ear.mp4')" >摸耳朵錯誤示範影片</a>
+  <h2 style="color:red">注意事項</h2>
+  <h3>上舉、下放 : 身體不可以傾斜</h3>
+  <!--<h3>平移 : 肩肘不可以上抬</h3>-->
+  <h3>摸耳朵 : 頭不可以傾斜 且 肩膀不可以上抬</h3>
+  </div>
+</div>
+</div>
+<div data-role="popup" id="videoWindow" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+        <video id="videoTag" width="240" height="320" controls="controls">
+        </video>
+    </div>
+</div>
+
+<!--  Database  -->
+<div data-role="page" id="record" > 	
+
+	<ul data-role="listview" id="SoccerPlayerList">
+	</ul>
+
+  <a href="#home" data-role="button" data-corners="false" id="goback">返回</a>
+  <button data-role="button" onclick="uploadALL()">上傳</button>  
+</div>    
+
+<!--  四種復健選擇畫面  -->
+<div data-role="page" id="pose"> 
+  <div data-role="header">
+    <a href="#home" data-icon="home" data-iconpos="notext"></a>
+    <h1>MedicalSuit</h1>
+  </div> 
+
+  <div data-role="content">
+   <a href="#picture" data-role="button" name="0" onclick="ttype(this.name)">上舉 - Raise</a>
+   <a href="#picture" data-role="button" name="1" onclick="ttype(this.name)">下放 - Lower</a>   
+   <a href="#picture" data-role="button" name="2" onclick="ttype(this.name)">摸耳朵 - Ear</a>	
+   <!--a href="#picture" data-role="button" name="2" onclick="update()">upload</a-->
+   <!--<<a href="" data-role="button" onclick="settype()">情境感知 - Context Aware</a></div>-->
+ </div>
+
+ 
+
+<!--  加速器或手環  -->
+<div data-role="page" id="picture">
+ <div data-role="header">	  	    
+   <a href="#pose" data-icon="back" data-iconpos="notext"></a>
+   <h1>MedicalSuit</h1>
+   <a href="#info" data-icon="info" data-iconpos="notext"></a>	    
+ </div>	  	
+ <div data-role="content" >
+   <div class="imgdiv"><img src="css/images/raise.png" id="spicture"></div>	    	    			    	
+   <a href="#level" data-role="button" data-rel="dialog">手機 - smartphone</a>
+   <!--<a href="#btlevel" data-role="button" data-rel="dialog" >手環 - bracelet</a>-->
+ </div>
+</div>
+
+<!--  手勢說明  -->	
+<div data-role="page" id="info">	  
+ <div data-role="header">	
+   <a href="#picture" data-icon="back" data-iconpos="notext"></a>	    	     
+   <h1>MedicalSuit</h1>
+ </div>
+ <div data-role="context" >		     
+   <div class="imgdiv"><img src="css/images/hand.png"></div>	   
+ </div>
+</div>	
+
+<!--  Level  -->
+<div data-role="page" id="level">
+ <div data-role="header">	        	     
+   <h1 style="font-size:14px">項目選擇</h1>
+ </div>
+
+ <div data-role="context" style="background-color:white;">	
+  <div class="choice_page">
+    <form>
+
+      <div class="side_div" id="side_div">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+          <div class="side_choice"><h3>哪隻手:</h3></div>
+          <div class="side_choice">
+            <input type="radio" name="side-choice" id="left" value="1" data-theme="a" />
+            <label for="left">左手</label>
+            <input type="radio" name="side-choice" id="right" value="2" data-theme="a" />
+            <label for="right">右手</label>
+          </div>    
+        </fieldset>
+      </div>
+
+      <div class="level_ear_div" id="level_ear_div">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+          <div class="level_ear_choice"><h3>選擇難度:</h3></div>
+          <div class="level_ear_choice">
+            <input type="radio" name="level_ear_choice" id="medium" value="2" data-theme="a" />
+            <label for="medium">至肩部</label>
+            <input type="radio" name="level_ear_choice" id="hard" value="3" data-theme="a" />
+            <label for="hard">至耳邊</label>
+          </div>    
+        </fieldset>
+      </div>
+
+
+      <div class="level_div"  id="level_div">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+         <div class="level_choice"><h3>做幾次:</h3></div>
+         <div class="level_choice">
+          <select id="level-choice" name="level-choice" data-theme="a" >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+          </select>
+        </div>		
+      </fieldset>
+    </div>
+
+    <div class="rank_div"  id="rank_div">
+     <fieldset data-role="controlgroup" data-type="horizontal">
+       <div class="rank_choice"><h3>做幾度:</h3></div>
+       <div class="rank_choice">
+        <input type="radio" name="rank-choice" id="rank1" data-theme="a" value="90"  />
+        <label for="rank1" ><div id="rank_first">90</div></label>
+
+        <input type="radio" name="rank-choice" id="rank2" data-theme="a" value="120"  />
+        <label for="rank2" ><div id="rank_second">120</div></label>
+
+        <input type="radio" name="rank-choice" id="rank3" data-theme="a" value="180"  />
+        <label for="rank3" ><div id="rank_third">180</div></label>
+      </div>
+    </fieldset>
+
+    <div class="imgdiv"><img src="" id="choice_picture"></div>
+  </div>
+
+  <div class="choice_btn"><button type="button" onclick="get_radio()">確定</button></div>
+</form>
+</div>
+</div>
+</div>	
+
+<!--  BtLevel  -->
+<!--div data-role="page" id="btlevel" >
+	  <div data-role="header">	        	     
+	    <h1>Select a level</h1>
+	  </div>
+	  <div data-role="context">		     
+	    <ul data-role="listview">
+	    <li data-icon="false"><a href="" name="2" onclick="btset(this.name)">Easy</a></li>
+	    <li data-icon="false"><a href="" name="4" onclick="btset(this.name)">Middle</a></li>
+	    <li data-icon="false"><a href="" name="6" onclick="btset(this.name)">Hard</a></li>
+	    </ul>
+	  </div>
+  </div-->	
+
+  <!--  執行畫面  -->
+<div data-role="page" id="low"> 
+   <div data-role="header">
+   <h1>MedicalSuit</h1>
+   </div> 
+   
+   <div data-role="content">
+      <p id="run"></p>
+      <div class="imgdiv"><img src="css/images/raise.png" id="sspicture"><br></div>
+      <p id="times">已成功 0 次</p> 
+      <p id="errortimes">，失敗 0 次</p>	  
+      <p id="accelerometer">Waiting...</p>
+      <!--a href="#" id="swaylink" onclick="compassReady()" data-role="button" class="ui-disabled">Ready</a-->
+   </div> 
+   
+   <div data-role="footer">
+	  <div data-role="navbar">
+	   <ul>
+	      <li><a name="a" onclick="ctheme(this.name)" id="a" class="d">點我返回</a></li>
+	      <!--li><a name="b" onclick="ctheme(this.name)" id="b" class="d">我</a></li>
+	      <li><a name="c" onclick="ctheme(this.name)" id="c" class="d">返</a></li>
+	      <li><a name="d" onclick="ctheme(this.name)" id="d" class="d">回</a></li-->  
+	   </ul>
+	  </div>
+   </div>  
+ </div>
+
+ <!--  Bt執行畫面  -->
+<!--div data-role="page" id="btlow"> 
+   <div data-role="header">
+   <a href="#picture" data-icon="back" data-iconpos="notext" onclick="closeRfcomm()"></a>	
+   <h1>MedicalSuit</h1>
+   </div> 
+   <div data-role="content">
+      <p id="btrun"></p>
+      <img src="css/images/raise.png" id="btpicture" width="369" height="400">
+      <p id="bttimes">已完成 0 次</p>                    
+      <div id='xyzposition'></div>
+   </div> 
+ </div-->
+
+ <!--  Loading  -->
+ <div data-role="page" id="ajaxloader">   
+   <div data-role="content">
+     <div id='xyzposition'></div>   
+   </div>    
+ </div>
+
+ <!--  contectaware  -->
+ <div data-role="page" id="contectaware">   
+   <div data-role="content">
+     <div id='showxyz'></div>   
+   </div>    
+ </div>
+
+ <!-- Hidden BT -->
+<!--div data-role="page" id="bluetooth">
+	  <div data-role="header" >	
+	    <a href="#picture" data-icon="back" data-iconpos="notext"></a>        	     
+	    <h1>Medicalsuit</h1>
+	  </div>
+	  <div data-role="context" >		     
+	   <button onclick="enableBT();">開啟藍芽</button>
+       <button onclick="disableBT();">關閉藍芽</button>
+       <br />
+       <button onclick="discoverDevices();">偵測裝置</button>
+       <br />
+       <select id='bt-devices-select'>
+       </select>
+       <br />
+       <button id='bt-pair' onclick="listUUIDs();">列出 UUID</button>
+       </p>
+       <p>
+       <select id='bt-device-uuids'>
+       </select>
+       <br />
+       <button id='bt-connect' onclick="openRfcomm();">連接裝置</button>
+       <br />
+       <button id='bt-disconnect' onclick="closeRfcomm();">關閉連接</button>
+       <br />
+       <button onclick="readRfcomm();">讀取資料</button>
+       <br />
+       <div id='xyzposition'></div>
+       </p>
+	  </div>
+  </div-->	
+
+
+</body>
+</html>

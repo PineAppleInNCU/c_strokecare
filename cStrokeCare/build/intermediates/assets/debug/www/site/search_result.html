@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8">
+	<meta name="language" content="zh_TW">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../css/jquery.mobile-1.3.2.css" /> 
+	<!-- <link rel="stylesheet" type="text/css" href="https://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />-->
+	<style type="text/css">
+	.center {
+		margin: 0px auto;
+  }
+  .ui-bar-c {
+		/*background: linear-gradient(#Ec9E04, #efb136) repeat scroll 0% 0% #EEE;*/
+		background-image: -webkit-gradient(linear, left top, left bottom, from( #EC9E04 /*{c-bar-background-start}*/), to( #EFb136 /*{c-bar-background-end}*/)); /* Saf4+, Chrome */
+		background-image: -webkit-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Chrome 10+, Saf5.1+ */
+		background-image:    -moz-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* FF3.6 */
+		background-image:     -ms-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* IE10 */
+		background-image:      -o-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Opera 11.10+ */
+		background-image:         linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/);
+	}
+  .ncuapi-title {
+			font-size: 120%;
+			font-weight: bolder;
+	}
+  .optional-class {
+			font-size: 80%;
+		  color: red;
+	}
+	</style>
+	<script src="../js/jquery-2.0.3.min.js"></script>
+	<script src="../js/jquery.mobile-1.3.2.min.js"></script>
+	<script src="../js/nculib-utils.js"></script>
+    <script type="text/javascript" src="https://rawgithub.com/hiddentao/google-tts/master/google-tts.min.js"></script>
+    <script type="text/javascript"  src="../js/soundmanager2.js"></script>
+	
+
+	<!--<script src="https://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>-->
+
+	<title>國立中央大學圖書館館藏目錄查詢-行動版</title>
+<script type="text/javascript">
+	function load(){
+$("#userinfo").empty();
+	if (window.localStorage.getItem("tokens") != null) {
+	
+		var tokens = JSON.parse(window.localStorage.getItem("tokens"));
+		var temp = '<input type="button" value ="個人資料" onclick="change()"  data-role="button" data-icon="gear">';
+		
+		$("#userinfo").append(temp);
+		// var temp2='<a data-theme="d" data-icon="info" data-role="button"  onclick="logout()">登出</a> ';
+		// $("#userinfo").append(temp2);
+		$("#header").trigger('create');
+	}else{
+		var tokens=null;
+		
+		var temp3 ='<input type="button" value ="登入" onclick="login()"  data-role="button" data-icon="info">';
+		
+		$("#userinfo").html(temp3);
+		$("#header").trigger('create');
+	}
+	}
+	var urls = window.location.href;
+	var book="";
+	var booklocation=[];
+	var bookstatus=[];
+	var isen=0;
+	var querys = "url="+urls.split("?")[1];
+    var numofbook=0; 	
+    var bookstring="";	
+
+
+
+			//$.mobile.loading('show');
+
+			$.ajax({
+				type: 'GET',
+				data: querys,
+				dataType: 'json',
+				url: 'https://www2.lib.ncu.edu.tw/~nfsnfs/mobile-new/api/getbook/',
+
+				success: function(json) {
+						
+
+					  	
+						if (json.title) {
+                       		$("#bookname").append(
+                       		 	json.title
+                           )}
+                       	var ss=json.title.search("/");
+                       	
+                       	var sd=json.title.substring(0,json.title.search("/")+1);
+						book=sd.replace("&","and");
+						
+                        if (json.isbn) {
+                            $("#isbn").append(
+                            	json.isbn
+                           )};
+                        if (json.imprint) {
+                            $("#publisher").append(
+                            	json.imprint
+                          )};
+                        if (json.version) {
+                            $("#publisher").append(
+                            	"/"+json.version
+                          )};
+                        if (json.detail) {
+                        	numofbook=json.detail.length;
+                        	for (var i = 0; i < json.detail.length; i++) {
+	                     	 $("#detail").append(
+	                        	'<li type="text" id="">'+json.detail[i].callnumber+"/"+"<br>"
+	                        )
+	                       $("#detail").append(
+	                        	json.detail[i].location+"/"+"<br>"
+	                        )
+	                       		booklocation[i]=json.detail[i].location;
+	                       $("#detail").append(
+	                        	json.detail[i].status+"/"+"<br>"
+	                        	
+	                        )
+	                       		bookstatus[i]=json.detail[i].status;
+	                       bookstatus[i]=json.detail[i].status;
+	                       $("#detail").append(
+	                        	json.detail[i].barcode+"/"+"<br>"+"</li>"
+	                        )
+	                     	}
+							for (var i = 0; i < numofbook; i++) {
+						  		var e=i+1
+						  		bookstring+="第"+e+"本，館藏地，"+booklocation[i]+"，"+"書籍狀態，"+bookstatus[i]+"，";
+						  	};
+                        };
+	                     
+
+				}
+			});
+			// google.load("language", "1");
+
+	function   isEnglish(name,index)   //英文值檢測
+	    {  
+	        if(name.length   ==   0){
+	            alert('error');
+	        }
+	        
+	        for(i   =   index;   i   <   name.length;   i++)   {  
+	            if(name.charCodeAt(i)   <=   128){
+	  
+	            }
+	            else{
+	            	isen=1;
+	                break;
+	            }
+	        
+	        }   
+	        
+	    }
+	function speech(){
+        
+        isEnglish(book,0);
+        
+        soundManager.setup({
+            url: '/',
+            preferFlash: false,
+            onready: function() {
+                var tts = new window.GoogleTTS();
+                // 列出所支援的語言
+                $.each(tts.languages(), function(key, value) {
+                $('#ss').append(key + " : " + value + "<br>");
+                });
+                // 可以得知目前取得的播放插件
+                tts.getPlayer(function (err , player) {
+                    if (err) {
+                      alert(err.toString());
+                    }
+                    if (player) {
+                      alert(player.toString());
+                    } else {
+                      alert("None available");
+                    }
+                    
+                    if (isen==0) {
+                        // tts.addEventListener('ended', function(){ this.currentTime = 0; }, false);
+                        // alert("GG"); 
+                        tts.play(book , 'en' , function(err){
+                            if(err){
+                                alert(err.toString());
+                            }else{
+                                alert("success");
+                            }
+                        });
+                        
+                    }else{
+                        tts.play(book , 'zh-TW' , function(err){
+                            if(err){
+                                alert(err.toString());
+                            }else{
+                                alert("success");
+                            }
+                        });
+                    }
+
+                });
+				// $("#playbutton").click(function(){
+    //                     // 可以更改內容和語言
+    //                     tts.play('水' , 'zh-TW' , function(err){
+    //                         if(err){
+    //                             alert(err.toString());
+    //                         }else{
+    //                             alert("success");
+    //                         }
+    //                     });
+    //         	});
+        	}
+        });
+    }
+
+    function playAudio() {
+    	isEnglish(book,0);
+	    var audio = document.getElementById("audio1"); // 取得 audio 控制項
+	    audio.addEventListener('ended', function(){ this.currentTime = 0; }, false); // 當播放完畢，強制回到開頭。
+	    if (isen==0) {
+            audio.src = "http://translate.google.com/translate_tts?ie=utf-8&tl="+"en"+"&q=bookname,"+book; // 設定語音為 google 
+       
+            
+        }else{
+        	audio.src = "http://translate.google.com/translate_tts?ie=utf-8&tl="+"zh"+"&q=書名，"+book;
+        }
+
+	    
+	    audio.play(); // 播放語音。
+	  }
+	function playAudio2() {
+    	
+    	
+	    var audio1 = document.getElementById("audio2"); // 取得 audio 控制項
+	   
+        audio1.src = "http://translate.google.com/translate_tts?ie=utf-8&tl="+"zh"+"&q="+bookstring;
+		audio1.addEventListener('ended', function(){ this.currentTime = 0; }, false); // 當播放完畢，強制回到開頭。
+	    audio1.play(); // 播放語音。
+	  }
+	function change(){
+    	window.location.href = "info.html";
+    }
+    function logout(){
+    	window.localStorage.clear();
+    	window.location.href = "../index.html";
+    }
+    function login(){
+    	window.location.href = "login.html";
+    }
+    function changesearch(){
+    	window.location.href = "../index-search.html";
+    }
+    function changenews(){
+    	window.location.href = "news.html";
+    }
+    function changeopentime(){
+    	window.location.href = "opentime.html";
+    }
+    function changeservice(){
+    	window.location.href = "service.html";
+    }
+    function changenewrecommend(){
+    	window.location.href = "newRecommend.html";
+    }
+</script>
+</head>
+
+<body onload="load()">
+	<script>
+
+	</script>
+ <div id="ss"></div>
+<div data-role="page" id="page" data-theme="c">
+  <div data-role="header" data-theme="c" data-position="fixed" data-id="myheader" id="header">
+    =
+    <h1 class="ui-title">中央大學圖書館</h1>
+		<div class="ui-btn-right" data-role="controlgroup" data-type="horizontal" id="userinfo">
+		<!-- <a data-theme="d" data-icon="info" data-role="button" rel="external" href="../site/login.html">登入</a>	 -->	</div>
+  </div>
+
+			<div id="content">
+	<div data-role="content">
+		<ul data-role="listview" data-inset="true" data-theme="c" data-divider-theme="d">
+				<li data-role="list-divider"> 書名 / 作者 </li>
+
+				<li id="bookname"><!-- 徹底研究jQuery Mobile+PHP手機程式及網站開發 / 張亞飛著. --></li>
+				<input type="button" value ="語音讀冊(書名)" onclick="playAudio()" data-theme="c" data-role="button" data-icon="arrow-l">
+				<li data-role="list-divider">ISBN</li>
+				<li id="isbn"><!-- 9789862579985 --></li>
+				<li data-role="list-divider">出版項 / 版本項</li>
+				<li id="publisher"><!-- 臺北市 : 上奇資訊, 2014. / 初版 --></li></ul>
+				<ul data-role="listview" data-inset="true" data-theme="d" >
+				<li data-role="list-divider">索書號 / 館藏地 / 狀態 / 條碼</li>
+				<li type="text" id="detail"></li>
+				<input type="button" value ="語音讀冊(館藏地&狀態)" onclick="playAudio2()" data-theme="c" data-role="button" data-icon="arrow-l">
+				
+				</ul></div>
+</div><!-- content -->
+	<!--</div>-->
+
+
+	<div class="clear"></div>
+
+	<div data-role="footer" data-theme="c" data-position="fixed" data-id="myfooter">
+			<div data-role="navbar">
+				<ul>
+				<li><a data-theme="c" data-icon="search" data-iconpos="top" onclick="changesearch()">館藏目錄</a></li>
+				<li><a data-theme="c" data-icon="info" data-iconpos="top" onclick="changenews()">最新消息</a></li>
+				<li><a data-theme="c" data-icon="gear" data-iconpos="top" onclick="changeopentime()">開放時間 </a></li>
+				<li><a data-theme="c" data-icon="gear" data-iconpos="top" onclick="changeservice()">服務項目</a></li>
+				<li><a data-theme="c" data-icon="info" data-iconpos="top" onclick="changenewrecommend()">新書推薦</a></li>
+				</ul>
+			</div>
+			
+	  <!-- <p><h6><a href="mailto:ncu57407@ncu.edu.tw">聯絡我們</a> | (03)4267127 | &copy; 2013 NCU Library</h6></p> -->
+	</div><!-- footer -->
+	
+</div><!-- page -->
+<audio id="audio1"></audio> 
+<audio id="audio2"></audio> 
+</body>
+</html>

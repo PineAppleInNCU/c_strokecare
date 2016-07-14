@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<title>我們應如何控制血壓、降低中風罹患率</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="text_style.css" rel="stylesheet">
+		<script src="cordova.js"></script>
+		<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+		<script type="text/javascript" charset="utf-8">
+            document.addEventListener("deviceready",onDeviceReady,false);
+            
+            function onDeviceReady() {
+				document.addEventListener("backbutton", onBackKeyDown, false);
+			}
+			function onBackKeyDown() {    
+      			navigator.app.backHistory();
+      		}
+		</script>
+	</head>
+	<body>
+		<div class="Qutitle">
+			<p>我們應如何控制血壓、降低中風罹患率?</p>
+			<button class="btn back" onclick="onBackKeyDown()">
+				回上一頁
+            </button>
+		</div>
+		<div class="text">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+			衛生署的統計資料顯示，罹患高血壓的人，其中風機率是一般人的六倍。高血壓患者如果未按時服藥控制血壓的話，中風機率是按時服藥者的二十一倍之多，因此控制血壓是首要之務。
+  			<br>
+  			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+			<b class="imp">由於高血壓沒有明顯不適症狀，所以必須確實定期量測血壓，才能有效控制病情，平日採取低鹽、低脂肪的飲食，來保持適當適重體重。</b>如果醫生有開立降血壓藥物。一定要按照規定服用。  	
+  			</p>
+		</div>
+
+	</body>
+</html>
+

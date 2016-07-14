@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html> 
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1">
+  <title>Reha</title>
+  <link rel="stylesheet" type="text/css" href="css/login/style.css" />
+  <script src="cordova.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/page.js"></script>
+  <script type="text/javascript" charset="utf-8">function exitFromApp(){navigator.app.exitApp();}</script>
+  <script type="text/javascript" charset="utf-8">   
+    document.addEventListener("deviceready", onDeviceReady, false);    
+    var db = window.openDatabase("Dummy_DB", "1.0", "Dummy_DB", 200000); 
+    var tempid ;
+
+    function onDeviceReady(){             
+      db.transaction(populateDB, errorCB, successCB);
+      document.addEventListener("backbutton", onBackKeyDown, false);
+      hasID();
+    }
+
+    //按下返回鍵do no-op
+    function onBackKeyDown() {    
+    }
+   //***************************mySQL*************************** 
+   
+    //create table 
+    function populateDB(tx) {    
+      tx.executeSql('CREATE TABLE IF NOT EXISTS Score (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,date TEXT,starttime TEXT,endtime TEXT,action INTEGER,angle INTEGER,suggest INTEGER,success INTEGER,fail INTEGER,total INTEGER)');         
+    }
+
+    //function will be called when an error occurred
+    function errorCB(err) {
+      alert("Error processing SQL: "+err.code);
+    }
+
+    //function will be called when process succeed and then show old record
+    function successCB() { 
+      refresh();       
+    }
+        
+    //ready to show data to record page
+    function refresh(){
+     db.transaction(queryDB,errorCB);
+    }
+
+    //select all data from SoccerPlayer
+    function queryDB(tx){
+     tx.executeSql('SELECT * FROM Score',[],querySuccess,errorCB);
+   }
+
+    //fetch data one by one and put it to record page
+
+   function addUserID(){
+      tempid = document.getElementById('text_id').value;
+      if(tempid.length !=7){
+        alert("長度不等於7碼，請再次輸入!!");
+        return false;
+      }
+      db.transaction(
+        function(tx){  
+          tx.executeSql('INSERT INTO Score (name) VALUES (?)', [tempid]);                
+        }, 
+        errorCB, 
+        function(){                                                
+          refresh();                                   
+        }); 
+      $.mobile.changePage("index.html",null,true,true);          
+    }  
+
+
+    function hasID(){
+      db.transaction(function(tx){    
+        tx.executeSql('SELECT * FROM Score',[],function(tx,rs){           
+            for(var i=0;i<rs.rows.length;i++){ 
+                if(rs.rows.item(i)['name']!=null){
+                  tempid = rs.rows.item(i)['name'];
+                  alert('Hi '+rs.rows.item(i)['name']);
+                  return;
+                }
+            }
+            alert("第一次登入，請輸入ID");
+        }); 
+      }); 
+    }
+</script>
+
+</head>
+
+<body>
+  <!-- insert ID if no exists ID -->
+  <div data-role="page" id="newID"> 
+    <div data-role="header" id="header">
+      <h1></h1>
+    </div>
+
+    <div data-role="content" id="content">
+      <img src="img/mainlog.png" id="login_p1">
+      <input type=text id="text_id" placeholder="收案編號" name="ID" >
+      <button onclick="addUserID()" id="login_btn" ><img src="img/Login_logo.png" id="login_img"></button>
+    </div>
+
+    <div data-role="footer" id="footer">
+      <img src="img/sublog.png" id="login_p2">
+    </div>
+
+  </div>   
+</body>
+</html>

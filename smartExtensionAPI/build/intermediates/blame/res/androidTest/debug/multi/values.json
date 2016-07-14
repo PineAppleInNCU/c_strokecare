@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "D:\\android\\C-StrokeCare\\smartExtensionAPI\\build\\intermediates\\res\\merged\\androidTest\\debug\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 1777,
+                    "endColumn": 54,
+                    "endOffset": 1827
+                },
+                "from": {
+                    "file": "D:\\android\\C-StrokeCare\\smartExtensionAPI\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 1777,
+                        "endColumn": 54,
+                        "endOffset": 1827
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,15 @@
+#learn_ul li .ui-btn{
+	background:transparent !important; 
+	border: 0;
+	box-shadow: none;
+}
+
+.bar_div{
+	text-align: center;
+}
+
+.bar_div p{
+	font: 12px 微軟正黑體 bold ;
+	color: #534741;
+}
+

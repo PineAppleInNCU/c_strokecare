@@ -1,0 +1,62 @@
+#Q1t{
+    display:none;
+}
+
+.Qutitle{
+  display:block;
+  font-family:微軟正黑體;
+  font-size:40px;
+  font-weight:bold;
+  font-style:normal;
+  text-align:center;
+  text-shadow:2px 3px 6px #cc9f52;
+
+}
+
+.text{
+  display:block;
+  font-family: 微軟正黑體;
+  font-size: 20px;
+  color: black;
+  margin-right: 10px;
+  margin-left: 10px;
+
+}
+
+.imp{
+  color: green;
+  font-family: 微軟正黑體;
+  margin-top: 0px;
+  font-weight: bold;
+}
+
+@-webkit-keyframes mtext
+{
+  from   {
+     opacity:0;
+  }
+  to  {
+    opacity:1;
+  }
+}
+
+/* Standard syntax */
+@keyframes mtext
+{
+  from   {
+     opacity:0;
+  }
+  to  {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes mtext
+{
+  from   {
+     opacity:0;
+  }
+  to  {
+    opacity:1;
+  }
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="language" content="zh_TW">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="../css/jquery.mobile-1.3.2.css" /> 
+<style type="text/css">
+.center {
+	margin: 0px auto;
+}
+.ui-bar-c {
+	/*background: linear-gradient(#Ec9E04, #efb136) repeat scroll 0% 0% #EEE;*/
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #EC9E04 /*{c-bar-background-start}*/), to( #EFb136 /*{c-bar-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient( #EC9E04 /*{c-bar-background-start}*/, #EFb136 /*{c-bar-background-end}*/);
+}
+/*
+.errorMessage {
+color: #E74737;
+}
+.ui-input-text {
+	color: #ecf0f1;
+}
+.form-input {
+	width: 65% !important;
+}
+.form-button {
+	width: 35% !important;
+}
+*/
+</style>
+<script src="../js/jquery-2.0.3.min.js"></script>
+<script src="../js/jquery.mobile-1.3.2.min.js"></script>
+<script src="../js/nculib-utils.js"></script>
+<script type="text/javascript" language="javascript" src="../cordova.js"></script>
+
+<title>國立中央大學圖書館館藏目錄查詢-行動版 - Login</title>
+<script type="text/javascript">
+function load3(){
+	$("#userinfo").empty();
+	if (window.localStorage.getItem("tokens") != null) {
+	
+		var tokens = JSON.parse(window.localStorage.getItem("tokens"));
+		var temp = '<input type="button" value ="個人資料" onclick="change()"  data-role="button" data-icon="gear">';
+		// var temp = '<a data-role="button" data-theme="d" data-icon="info" class="ui-btn-right" class="ui-corner-all" onclick="change()" >個人資料</a> ';
+		
+		$("#userinfo").html(temp);
+		// var temp2='<a data-theme="d" data-icon="info" data-role="button"  onclick="logout()">登出</a> ';
+		// $("#userinfo").append(temp2);
+		$("#header").trigger('create');
+	}else{
+		var tokens=null;
+		// var temp3 = '<input type="button" value ="個人資料" onclick="login()"  data-role="button"  data-inline="true">';
+		var temp3 =  '<input type="button" value ="登入" onclick="login()"  data-role="button" data-icon="info">';
+		
+		$("#userinfo").html(temp3);
+		$("#header").trigger('create');
+		
+	}
+
+}
+</script>
+</head>
+
+<body onload="load3()">
+
+<div data-role="page" id="page" data-theme="c">
+	<div data-role="header" data-theme="c" data-position="fixed" data-id="myheader" id="header">
+		<h1 class="ui-title">中央大學圖書館</h1>
+		<div  class="ui-btn-right" data-role="controlgroup"  id="userinfo">
+			<!-- <a data-theme="d" data-icon="info" data-role="button" rel="external" href="../site/login.html">登入</a> -->		</div>
+	</div>
+
+	<div id="content">
+		<div data-role="content">
+			<div class="form">
+				<form id="login-form">
+					<div class="row">
+						<label for="user" class="required">帳號 <span class="required">*</span></label>		<input placeholder="請輸入您的帳號" name="user" id="user" type="password" />			</div>
+					<div class="row">
+						<label for="passwd" class="required">密碼 <span class="required">*</span></label>		<input placeholder="請輸入您的密碼" name="passwd" id="passwd" type="password" />			</div>
+					<div class="row submit">
+						<input type="submit" name="yt0" value="登入" />	</div>
+
+				
+				</form>
+			</div><!-- form -->	
+		<div class="row">
+			<textarea name="textarea" readonly>
+登入帳號密碼說明(About ID / Password)：
+1：身份別是中大教職員、學生、中大校友借書證、台灣聯大系統(UST)讀者、本館核發臨時證，請輸入帳號是身分證字號，密碼是身分證字號
+2：身份別是外籍教職員 Foreign Faculty、外籍學生 Foreign Student(Registered before Sept. 2012)，請輸入帳號是居留證編號ARC Number ，密碼是居留證編號ARC Number
+3：身份別是外籍學生 Foreign Student(Registered after Sept. 2012)， 請輸入帳號是學生證號碼Student ID No，密碼是學生證號碼Student ID No.
+4：身份別是館際合作借書證，請輸入帳號是證件條碼號，密碼是證件條碼號
+			</textarea>
+		</div>
+
+		</div>
+	</div><!-- content -->
+	<!--</div>-->
+
+	<div class="clear"></div>
+
+	<div data-role="footer" data-theme="c" data-position="fixed" data-id="myfooter">
+		<div data-role="navbar">
+			<ul>
+				<li><a data-theme="c" data-icon="search" data-iconpos="top" onclick="changesearch()">館藏目錄</a></li>
+				<li><a data-theme="c" data-icon="info" data-iconpos="top" onclick="changenews()">最新消息</a></li>
+				<li><a data-theme="c" data-icon="gear" data-iconpos="top" onclick="changeopentime()">開放時間 </a></li>
+				<li><a data-theme="c" data-icon="gear" data-iconpos="top" onclick="changeservice()">服務項目</a></li>
+				<li><a data-theme="c" data-icon="info" data-iconpos="top" onclick="changenewrecommend()">新書推薦</a></li>
+			</ul>
+		</div>
+		<!-- <p><h6><a href="mailto:ncu57407@ncu.edu.tw">聯絡我們</a> | (03)4267127 | &copy; 2013 NCU Library</h6></p> -->
+	</div><!-- footer -->
+
+</div><!-- page -->
+
+</body>
+<script type="text/javascript">
+
+	
+		
+
+
+
+
+
+	$('form').submit(function() {
+		
+		var getData = "user="+ document.getElementById("user").value +"&passwd="+document.getElementById("passwd").value;
+		
+		
+		$.ajax({
+			type: 'GET',
+			data: getData,
+			dataType: 'json',
+			url: 'https://www2.lib.ncu.edu.tw/~nfsnfs/mobile-new/api/login',
+			success: function(json) {
+				if (typeof json.token !== "undefined") {
+					// localStorage.removeItem("tokens");
+					window.localStorage.setItem("tokens",JSON.stringify(json.token));
+
+					//alert(json.success + " : " + json.token);
+					window.location.href = "info.html";
+					
+				} else if (typeof json.message !== "undefined") {
+					alert(json.message);
+				}
+			},
+			error: function(json) {
+				alert('Network or System Error!');
+			}
+		});
+
+		return false;
+	});
+    function change(){
+    	window.location.href = "info.html";
+    }
+    function logout(){
+    	window.localStorage.clear();
+    	window.location.href = "../index.html";
+    }
+    function login(){
+    	window.location.href = "login.html";
+    }
+    function changesearch(){
+    	window.location.href = "../index-search.html";
+    }
+    function changenews(){
+    	window.location.href = "news.html";
+    }
+    function changeopentime(){
+    	window.location.href = "opentime.html";
+    }
+    function changeservice(){
+    	window.location.href = "service.html";
+    }
+    function changenewrecommend(){
+    	window.location.href = "newRecommend.html";
+    }
+</script>
+</html>

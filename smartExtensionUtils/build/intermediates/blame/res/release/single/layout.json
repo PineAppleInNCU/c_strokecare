@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\android\\C-StrokeCare\\smartExtensionUtils\\build\\intermediates\\res\\merged\\release\\layout\\smart_watch_notification_widget.xml",
+        "source": "D:\\android\\C-StrokeCare\\smartExtensionUtils\\src\\main\\res\\layout\\smart_watch_notification_widget.xml"
+    },
+    {
+        "merged": "D:\\android\\C-StrokeCare\\smartExtensionUtils\\build\\intermediates\\res\\merged\\release\\layout\\smart_watch_widget.xml",
+        "source": "D:\\android\\C-StrokeCare\\smartExtensionUtils\\src\\main\\res\\layout\\smart_watch_widget.xml"
+    }
+]

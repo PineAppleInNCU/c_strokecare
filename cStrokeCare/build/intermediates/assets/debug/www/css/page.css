@@ -1,0 +1,30 @@
+body {
+	font-size:12px;
+	-webkit-user-select:none;
+    -webkit-text-size-adjust:none;
+	font-family:helvetica;
+}
+
+.page {
+    float: left;
+    -webkit-transform:translate3d(0,0,0);
+    height: 100%;
+}
+
+#wrapper {
+    position:absolute;
+    z-index:1;
+    overflow:hidden;
+    height: 100%;
+    width: 100%;
+}
+
+#scroller {
+	height:100%;
+}
+
+.ui-page {   
+     backface- visibility :  hidden ;   
+     -webkit-backface- visibility :  hidden ;  /* Chrome and Safari */   
+     -moz-backface- visibility :  hidden ;  /* Firefox */   
+}

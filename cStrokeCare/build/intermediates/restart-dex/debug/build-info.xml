@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="arm64-v8a,armeabi-v7a,armeabi"
+    api-level="23"
+    density="xxhdpi"
+    format="7"
+    timestamp="138867562047431"
+    token="-8192796697456035393" >
+
+    <task
+        name="javac"
+        duration="0" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="0" />
+    <task
+        name="verifier"
+        duration="0" />
+
+    <artifact
+        location="D:\android\C-StrokeCare\cStrokeCare\build\outputs\apk\cStrokeCare-debug.apk"
+        type="MAIN" />
+
+    <build timestamp="138867562047431" >
+        <artifact
+            location="D:\android\C-StrokeCare\cStrokeCare\build\outputs\apk\cStrokeCare-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>

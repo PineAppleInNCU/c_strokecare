@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>EBOOK</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1">
+		<!--script type="text/javascript" charset="utf-8" src="cordova.js"></script-->
+		<link href="css/style_ebook.css" rel="stylesheet">
+		<script src="js/cordova.js"></script>
+		<script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			var get_index_value = localStorage.getItem("get_index");
+			document.addEventListener("deviceready",onDeviceReady,false);
+			
+			function onDeviceReady() {
+				document.addEventListener("backbutton", onBackKeyDown, false);
+			}
+			function onBackKeyDown() {
+				if(get_index_value == "i"){
+	                window.location.href = "i_index.html";
+	            }
+	            else{
+	               	window.location.href = "w_index.html";
+	            }   
+      			//navigator.app.backHistory();
+      		}
+			$(window).load(function(){
+				$('.b1').click(function(){
+					//$('.main').css('display','none');
+					window.location.href="part1.html";
+					//$('.ani').css('display','block');
+	                //setTimeout(function(){window.location.href="part1.html";},6000);
+	                    
+				});
+	                
+				$('.b2').click(function(){
+	        		//$('.main').css('display','none');
+	        		window.location.href="part2.html";
+					//$('.ani').css('display','block');
+	                //setTimeout(function(){window.location.href="part2.html";},6000);
+				});
+
+				$('.b3').click(function(){
+	        		//$('.main').css('display','none');
+	        		window.location.href="part3.html";
+					//$('.ani').css('display','block');
+	                //setTimeout(function(){window.location.href="part3.html";},6000);
+				});
+
+				$('.b4').click(function(){
+	        		//$('.main').css('display','none');
+	        		window.location.href="part4.html";
+					//$('.ani').css('display','block');
+	                //setTimeout(function(){window.location.href="part4.html";},6000);
+				});
+
+				$('.back').click(function(){
+	                //window.location.href="index.html#main-page";
+	                if(get_index_value == "i"){
+	                	window.location.href = "i_index.html";
+	                }
+	                else{
+	                	window.location.href = "w_index.html";
+	                }
+	                //history.go(-1);
+				});
+			});
+
+		</script>
+	</head>
+	
+	<body>
+		<div class="main">
+			<div id="top">
+				<h1 class="maintext">目 錄</h1>
+			</div>
+				<button class ="btn b1">慢性疾病是通往中風的<br>危險途徑
+				</button>
+				<button class ="btn b2">控制慢性疾病是首要之務
+				</button>
+				<button class ="btn b3">你的生活潛藏著中風的<br>隱形殺手嗎</button>
+				<button class ="btn b4">改善不良生活習慣，<br>以預防腦中風</button>
+				<button class ="btn back">回到上一頁</button>
+		</div>
+		<!--div class="ani">
+		        <div class="oringal Q">Question</div>
+                <div class="oringal and">&</div>
+                <div class="oringal An">Answer</div>
+		</div-->
+	</body>
+	
+</html>

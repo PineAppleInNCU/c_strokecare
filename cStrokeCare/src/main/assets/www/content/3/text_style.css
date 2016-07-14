@@ -1,0 +1,107 @@
+body{
+  background-image: url(back.png);
+  height:100%;
+}
+
+.btn{
+  -moz-box-shadow:inset 2px 2px 3px 0px #fce2c1;
+  -webkit-box-shadow:inset 2px 2px 3px 0px #fce2c1;
+  box-shadow:inset 2px 2px 3px 0px #fce2c1;
+  background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #e3a456), color-stop(1, #fab764) );
+  background:-moz-linear-gradient( center top, #e3a456 5%, #fab764 100% );
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e3a456', endColorstr='#fab764');
+  background-color:#e3a456;
+  -webkit-border-top-left-radius:25px;
+  -moz-border-radius-topleft:25px;
+  border-top-left-radius:25px;
+  -webkit-border-top-right-radius:25px;
+  -moz-border-radius-topright:25px;
+  border-top-right-radius:25px;
+  -webkit-border-bottom-right-radius:25px;
+  -moz-border-radius-bottomright:25px;
+  border-bottom-right-radius:25px;
+  -webkit-border-bottom-left-radius:25px;
+  -moz-border-radius-bottomleft:25px;
+  border-bottom-left-radius:25px;
+  text-indent:-5.989999998807907px;
+  border:1px solid #eeb44f;
+  display:inline-block;
+  color:#ffffff;
+  font-family:微軟正黑體;
+  font-size:30px;
+  font-weight:bold;
+  font-style:normal;
+  height:50px;
+  line-height:70px;
+  width:170px;
+  text-decoration:none;
+  text-align:center;
+  text-shadow:2px 3px 6px #cc9f52;
+  /*margin-top:50px;*/
+  margin-bottom:30px;
+  margin-right:5%;
+  margin-left:5%;
+  line-height:50px;
+}
+
+.Qutitle{
+  display:block;
+  font-family:微軟正黑體;
+  font-size:40px;
+  font-weight:bold;
+  font-style:normal;
+  text-align:center;
+  text-shadow:2px 3px 6px #cc9f52;
+  -webkit-animation : Qi 1.5s;
+  animation : Qi 1.5s;
+  -moz-animation : Qi 1.5s;
+}
+
+.text{
+  display:block;
+  font-size: 20px;
+  color: black;
+  margin-right: 10px;
+  margin-left: 10px;
+  -webkit-animation : Qi 2s;
+  animation : Qi 2s;
+  -moz-animation : Qi 2s;
+}
+
+.imp{
+  color: green;
+  font-family: 微軟正黑體;
+  margin-top: 0px;
+  font-weight: bold;
+}
+
+@-webkit-keyframes Qi
+{
+  from   {
+     opacity:0;
+  }
+  to  {
+    opacity:1;
+  }
+}
+
+/* Standard syntax */
+@keyframes Qi
+{
+  from   {
+     opacity:0;
+  }
+  to  {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes Qi
+{
+  from   {
+     opacity:0;
+  }
+  to  {
+    opacity:1;
+  }
+}

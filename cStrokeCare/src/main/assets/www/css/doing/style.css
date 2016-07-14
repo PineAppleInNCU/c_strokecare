@@ -1,0 +1,66 @@
+#do-page{
+    margin: 0;
+    padding: 0;
+}
+#do-content {
+    margin: 0;
+    padding: 0;
+}
+.do_img {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+}
+
+#errortimes{
+    text-align: center;
+    font: 20px 微軟正黑體;
+}
+
+#times{
+    text-align: center;
+    font: 20px 微軟正黑體;
+}
+
+.d{
+    /*background: -webkit-linear-gradient(#f2e1b9, #d7ac5f); /* For Safari 5.1 to 6.0 */
+    /*background: -o-linear-gradient(#f2e1b9, #d7ac5f); /* For Opera 11.1 to 12.0 */
+    /*background: -moz-linear-gradient(#f2e1b9, #d7ac5f); /* For Firefox 3.6 to 15 */
+    /*background: linear-gradient(#f2e1b9, #d7ac5f); /* Standard syntax (must be last) */
+
+    background: -webkit-linear-gradient(#f2eddf,#e1ddda); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#f2eddf,#e1ddda); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#f2eddf,#e1ddda); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#f2eddf,#e1ddda); /* Standard syntax (must be last) */
+}
+
+#a.ui-btn-active {
+    background: -webkit-linear-gradient(#69bde4,#8cdedc) !important; /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#69bde4,#8cdedc) !important; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#69bde4,#8cdedc) !important; /* For Firefox 3.6 to 15 */
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+}
+
+#b.ui-btn-active {
+    background: -webkit-linear-gradient(#69bde4,#8cdedc) !important; /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#69bde4,#8cdedc) !important; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#69bde4,#8cdedc) !important; /* For Firefox 3.6 to 15 */
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+}
+
+#c.ui-btn-active {
+    background: -webkit-linear-gradient(#69bde4,#8cdedc) !important; /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#69bde4,#8cdedc) !important; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#69bde4,#8cdedc) !important; /* For Firefox 3.6 to 15 */
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+}
+#d.ui-btn-active {
+    background: -webkit-linear-gradient(#69bde4,#8cdedc) !important; /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#69bde4,#8cdedc) !important; /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#69bde4,#8cdedc) !important; /* For Firefox 3.6 to 15 */
+    background:linear-gradient(#69bde4,#8cdedc)   !important;
+}
+
+#do-back{
+    border: none;
+}

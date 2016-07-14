@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <style>
+            html, body
+            {
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+            }
+
+            #footerTable {
+                width: 100%;
+            }
+            footer {
+                position:absolute;
+                bottom:0;
+                width:100%;
+                height:40px;   
+                background:#ccc;
+
+            }
+        </style>
+        <script src="js/lib/phonegap.js"></script>
+
+        <script language="javascript">
+            var watch = 0;
+            var cnv;
+            var target;
+            var xPos;
+            var yPos;
+            var canvas;
+
+            window.onload = function()
+            {
+                //init();
+                document.addEventListener("deviceready", init, false);
+            }
+
+            function init()
+            {         
+                var iW = window.innerWidth;
+                var iH = window.innerHeight;
+                canvas= document.getElementById('myCanvas');
+                cnv = canvas.getContext("2d");
+                cnv.canvas.width = iW;
+                cnv.canvas.height = iH-40;
+                target = new Image();
+                target.src = "crosshair.png";
+                xPos = (iW-target.width)/2;
+                yPos = (iH-target.height)/2;
+                target.onload = function()
+                {
+                    cnv.drawImage(target, xPos, yPos);
+                }
+                watch = navigator.accelerometer.watchAcceleration(success, failure, {frequency: 100});
+                
+            }
+
+            function success(accel)
+            {
+                document.getElementById("xOut").innerHTML = accel.x;
+                document.getElementById("yOut").innerHTML = accel.y;
+                document.getElementById("zOut").innerHTML = accel.z;
+                cnv.clearRect(0, 0, canvas.width, canvas.height);
+                xPos += -1*(accel.x * 1.5);
+                yPos += (accel.y * 1.5);
+                cnv.drawImage(target, xPos, yPos);                
+                   
+            }
+
+            function failure()
+            {
+                alert("Error");
+            }
+        </script>
+        <title>Hello World</title>
+    </head>
+    <body>
+        <canvas id="myCanvas" ></canvas>
+        <footer>
+            <table id="footerTable">
+                <tr>
+                    <td>X: <span id="xOut">0</span></td>
+                    <td>Y: <span id="yOut">0</span></td>
+                    <td>Z: <span id="zOut">0</span></td>
+                </tr>
+            </table>
+        </footer>
+        
+    </body>
+</html>
